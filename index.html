@@ -3,215 +3,782 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="nav-title">Travel App Template</title>
-   
+    <title>Travel App Template</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
    
     <style>
-        /* =========================================
-           1. 設計語言 (更換顏色與風格請改這裡)
-           ========================================= */
         :root {
-            --primary-bg: #3E3C3A; /* 主背景色 */
-            --accent-color: #E95464; /* 強調色 (按鈕、標籤) */
-            --card-bg: #E8E8E8; /* 卡片背景 */
-            --text-dark: #2F2F2F; /* 深色文字 */
-            --text-light: #FFFFFB; /* 淺色文字 */
-            --nav-bg: #2B2A29; /* 導航欄背景 */
-            --font-main: "Noto Sans TC", sans-serif;
+            --bg-color: #3E3C3A; /* 煤竹色 */
+            --card-color: #E8E8E8; /* 灰白 */
+            --accent-color: #E95464; /* 朱紅 */
+            --text-on-dark: #FFFFFB; /* 象牙白 */
+            --text-on-light: #2F2F2F; /* 墨黑 */
+            --menu-bg: #2b2a29;
+            --weather-gradient: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
         }
-        /* 基礎設定 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: var(--font-main);
-            background-color: var(--primary-bg);
-            color: var(--text-light);
-            margin: 0; padding: 0; height: 100vh; overflow: hidden;
-            display: flex; flex-direction: column;
+            font-family: "Noto Sans TC", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-on-dark);
+            margin: 0; padding: 0;
+            height: 100vh;
+            display: flex; flex-direction: column; overflow: hidden;
         }
-        /* 佈局組件 */
-        header { height: 60px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .date-selector-container { background: var(--primary-bg); padding: 10px; overflow-x: auto; display: flex; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.2); }
-        .date-chip { min-width: 60px; padding: 8px; border-radius: 12px; background: rgba(255,255,255,0.1); text-align: center; cursor: pointer; font-size: 0.8rem; }
-        .date-chip.active { background: var(--accent-color); color: white; transform: scale(1.05); }
-        main { flex: 1; position: relative; overflow-y: auto; padding-bottom: 80px; }
-        .page { display: none; padding: 20px; }
-        .page.active { display: block; }
-        /* 卡片與時間軸 */
-        .timeline-item { position: relative; padding-left: 25px; border-left: 2px solid var(--accent-color); margin-bottom: 20px; margin-left: 10px; }
-        .card { background: var(--card-bg); color: var(--text-dark); padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .card-time { color: var(--accent-color); font-weight: bold; font-size: 0.8rem; }
-        .card-title { margin: 5px 0; font-size: 1.1rem; }
-        .tag { display: inline-block; font-size: 0.7rem; background: #ddd; padding: 2px 6px; border-radius: 4px; margin-right: 5px; }
-        /* 導航 */
-        nav.bottom-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--nav-bg); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); }
-        .nav-item { color: #888; text-align: center; font-size: 0.7rem; flex: 1; }
-        .nav-item.active { color: var(--accent-color); }
-        .nav-item i { font-size: 1.4rem; display: block; margin-bottom: 4px; }
-        /* 彈窗 */
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index: 1000; align-items: flex-end; }
-        .modal-content { background: white; color: var(--text-dark); width: 100%; padding: 25px; border-radius: 20px 20px 0 0; max-height: 80vh; overflow-y: auto; }
-        .btn-action { background: var(--accent-color); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; margin-top: 10px; }
+        /* --- Header --- */
+        header {
+            padding: 15px 20px;
+            background-color: rgba(62, 60, 58, 0.98);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky; top: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 60px;
+        }
+        header h1 { margin: 0; font-size: 1.2rem; font-family: "Shippori Mincho", serif; letter-spacing: 1px; }
        
-        #map-container { height: 100%; width: 100%; min-height: 400px; }
+        .header-icons { display: flex; gap: 20px; align-items: center; }
+        .header-btn { color: var(--text-on-dark); font-size: 1.2rem; cursor: pointer; text-decoration: none; position: relative;}
+        .fan-btn i { color: var(--accent-color); }
+        /* --- Global Date Selector --- */
+        .date-selector-container {
+            background: var(--bg-color); z-index: 90;
+            padding: 10px 20px 10px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .date-selector {
+            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .date-selector::-webkit-scrollbar { display: none; }
+       
+        .date-chip {
+            background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 16px;
+            white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: #aaa;
+            display: flex; flex-direction: column; align-items: center; min-width: 55px;
+            transition: all 0.2s; border: 1px solid transparent;
+        }
+        .date-chip.active {
+            background: var(--accent-color); color: #fff;
+            box-shadow: 0 0 10px rgba(233, 84, 100, 0.4); transform: scale(1.05);
+        }
+        /* --- Main Content --- */
+        main { flex: 1; overflow-y: hidden; position: relative; }
+        .page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow-y: auto; padding: 10px 0 90px 0;
+            display: none; opacity: 0; transition: opacity 0.3s ease;
+            background-color: var(--bg-color);
+            -webkit-overflow-scrolling: touch;
+        }
+        .page.active { display: block; opacity: 1; z-index: 10; }
+       
+        /* Map Page Specific */
+        #page-map { padding: 0 0 80px 0; }
+        #map-container { width: 100%; height: 100%; }
+        /* 子頁面 */
+        .sub-page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color); z-index: 2000;
+            display: flex; flex-direction: column;
+            transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        .sub-page.open { transform: translateX(0); }
+        .sub-header {
+            padding: 15px 20px; background: var(--menu-bg);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 15px;
+        }
+        .back-btn { font-size: 1.2rem; color: var(--accent-color); background: none; border: none; padding: 5px; cursor: pointer;}
+        .sub-header h2 { margin: 0; font-size: 1.1rem; font-family: "Shippori Mincho", serif; }
+        .sub-content {
+            flex: 1; overflow-y: auto; padding: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+        /* --- Timeline & Cards --- */
+        .timeline-container { padding: 0 20px; }
+        .timeline-item {
+            position: relative; padding-left: 25px; padding-bottom: 30px;
+            border-left: 2px solid rgba(233, 84, 100, 0.3);
+        }
+        .timeline-item:last-child { border-left: 2px solid transparent; padding-bottom: 0; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -6px; top: 18px;
+            width: 10px; height: 10px; background: var(--accent-color);
+            border-radius: 50%; box-shadow: 0 0 0 4px rgba(62, 60, 58, 1);
+        }
+        .card {
+            background-color: var(--card-color); color: var(--text-on-light);
+            border-radius: 12px; padding: 16px; margin-bottom: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2); cursor: pointer;
+            position: relative;
+        }
+        .card:active { transform: scale(0.98); }
+        .card-time { font-size: 0.85rem; color: var(--accent-color); font-weight: 700; display: block; margin-bottom: 6px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 8px 0; font-family: "Shippori Mincho", serif; line-height: 1.4; padding-right: 10px;}
+        .card-price {
+            position: absolute; bottom: 12px; right: 15px;
+            font-weight: bold; color: #d63345; font-size: 0.9rem;
+            background: rgba(255,255,255,0.6); padding: 2px 6px; border-radius: 4px;
+        }
+        .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; max-width: 70%; }
+        .card-tag { font-size: 0.7rem; background: #D0D0D0; padding: 3px 8px; border-radius: 4px; color: #444; }
+        .card-tag.highlight { background: #ffe4e6; color: #d63345; border: 1px solid #fab1b8; }
+        .card-tag.tips { background: #e0f2fe; color: #0369a1; }
+        .card-tag.alert { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; font-weight: bold;}
+        /* --- Weather Styles --- */
+        .weather-card {
+            background: var(--weather-gradient);
+            border-radius: 16px; padding: 25px; margin: 20px;
+            text-align: center; color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .weather-main { display: flex; justify-content: space-around; align-items: center; margin: 20px 0; }
+        .weather-icon { font-size: 3.5rem; }
+        .weather-temp { font-size: 3rem; font-weight: 300; }
+        .weather-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; }
+        .w-item { font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
+        /* --- Shopping Styles --- */
+        .shopping-section-title { font-family: "Shippori Mincho", serif; margin: 0 0 10px 0; color: var(--accent-color); border-bottom: 1px solid #555; padding-bottom: 5px;}
+        .shopping-group { margin-bottom: 25px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; }
+        /* --- Tools Grid --- */
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 10px; }
+        .tool-btn {
+            background: rgba(255,255,255,0.08); padding: 25px 15px;
+            border-radius: 16px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.05); cursor: pointer;
+        }
+        .tool-btn i { font-size: 2.2rem; color: var(--accent-color); margin-bottom: 12px; display: block; }
+        /* --- Lists --- */
+        .checklist-item {
+            background: rgba(255,255,255,0.08); padding: 15px; margin-bottom: 12px;
+            border-radius: 8px; display: flex; align-items: center; gap: 15px;
+        }
+        .checklist-item.checked { opacity: 0.5; }
+        .checklist-item.checked span { text-decoration: line-through; }
+        .checklist-item input { width: 22px; height: 22px; accent-color: var(--accent-color); }
+       
+        /* --- Footer --- */
+        nav.bottom-nav {
+            position: fixed; bottom: 0; width: 100%;
+            background-color: var(--menu-bg);
+            display: flex; justify-content: space-around;
+            padding: 10px 0 25px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 100;
+        }
+        .nav-item { color: #888; text-align: center; font-size: 0.75rem; cursor: pointer; width: 25%; }
+        .nav-item i { display: block; font-size: 1.4rem; margin-bottom: 4px; }
+        .nav-item.active { color: var(--accent-color); }
+        /* --- Modal --- */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 3000;
+            justify-content: center; align-items: end; backdrop-filter: blur(3px);
+        }
+        .modal.open { display: flex; }
+        .modal-content {
+            background: var(--card-color); color: var(--text-on-light);
+            width: 100%; max-width: 600px; max-height: 85vh;
+            border-radius: 20px 20px 0 0; padding: 25px;
+            overflow-y: auto; animation: slideUp 0.3s ease;
+            -webkit-overflow-scrolling: touch;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: #888; cursor: pointer; }
+       
+        .info-row { margin: 12px 0; display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; line-height: 1.6; }
+        .info-row i { color: var(--accent-color); margin-top: 4px; width: 20px; text-align: center; }
+        .note-box {
+            background: #f8f8f8; border-left: 4px solid var(--accent-color);
+            padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0;
+            font-size: 0.95rem; color: #333; line-height: 1.7;
+        }
+        .link-btn {
+            display: inline-block; background: #eee; color: #333;
+            padding: 6px 12px; border-radius: 4px; text-decoration: none;
+            font-size: 0.85rem; margin-top: 5px; border: 1px solid #ccc;
+        }
+        .action-btn {
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            width: 100%; padding: 14px; margin-top: 20px;
+            background: var(--accent-color); color: white;
+            text-decoration: none; border-radius: 10px;
+            font-weight: bold; font-size: 1rem; border: none; cursor: pointer;
+        }
+       
+        /* Taxi Card */
+        .taxi-card {
+            background: #fff; color: #000; padding: 20px;
+            border: 4px solid #000; margin: 15px 0;
+            text-align: center; border-radius: 8px;
+        }
+
+        /* Edit Form Styles */
+        .edit-form { display: none; padding: 20px; background: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2500; justify-content: center; align-items: center; }
+        .edit-form.open { display: flex; }
+        .edit-content { background: white; color: black; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; }
+        .edit-content input, .edit-content textarea { width: 100%; margin: 10px 0; padding: 8px; }
+        .edit-content button { background: var(--accent-color); color: white; border: none; padding: 10px; width: 100%; cursor: pointer; }
     </style>
 </head>
 <body>
     <header>
-        <h1 id="trip-title">My Trip</h1>
-        <div onclick="location.reload()" style="cursor:pointer"><i class="fa-solid fa-rotate"></i></div>
+        <h1>Travel App Template</h1>
+        <div class="header-icons">
+            <a href="googletranslate://" class="header-btn" title="Google Translate">
+                <i class="fa-solid fa-language"></i>
+            </a>
+            <a href="#" class="header-btn fan-btn" onclick="openToolsPage(); return false;">
+                <i class="fa-solid fa-fan fa-spin" style="animation-duration: 10s;"></i>
+            </a>
+            <a href="#" class="header-btn" onclick="openEditForm(); return false;" title="Add Event">
+                <i class="fa-solid fa-plus"></i>
+            </a>
+        </div>
     </header>
-    <div class="date-selector-container" id="date-selector"></div>
+    <div class="date-selector-container">
+        <div class="date-selector" id="date-selector"></div>
+    </div>
     <main>
         <div id="page-itinerary" class="page active">
-            <div id="timeline-container"></div>
+            <div class="timeline-container" id="timeline-container" style="padding-top: 20px;"></div>
+            <div style="text-align:center; color:#666; font-size:0.8rem; margin:30px 0;">平安喜樂 • 滿載而歸</div>
         </div>
-        <div id="page-map" class="page" style="height: 100%; padding: 0;">
+        <div id="page-map" class="page">
             <div id="map-container"></div>
+            <div style="position:absolute; bottom:90px; left:10px; background:rgba(255,255,255,0.9); padding:8px 12px; border-radius:8px; color:#333; font-size:0.8rem; box-shadow:0 2px 5px rgba(0,0,0,0.3); pointer-events:none; z-index:999;">
+                <i class="fa-solid fa-location-dot" style="color:var(--accent-color)"></i> 顯示當日行程地點
+            </div>
+        </div>
+        <div id="page-weather" class="page">
+            <div style="padding: 20px;">
+                <h2 style="font-family:'Shippori Mincho',serif; text-align:center; margin-bottom:10px;">當日天氣預報</h2>
+                <div id="weather-content"></div>
+               
+                <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:12px; margin:20px 0; display:flex; align-items:center; justify-content:space-between; border:1px solid rgba(255,255,255,0.1);">
+                    <div>
+                        <div style="font-weight:bold; color:var(--accent-color);"><i class="fa-solid fa-glass-water"></i> 水分補給 Check</div>
+                        <div style="font-size:0.8rem; opacity:0.7; margin-top:4px;">喝酒前請先喝水</div>
+                    </div>
+                    <div style="display:flex; gap:15px; align-items:center;">
+                        <button onclick="addWater()" style="background:var(--accent-color); border:none; color:white; width:45px; height:45px; border-radius:50%; font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-plus"></i></button>
+                        <span id="water-count" style="font-size:2rem; font-family:'Shippori Mincho',serif; min-width:30px; text-align:center;">0</span>
+                    </div>
+                </div>
+                <div class="note-box">
+                    <div style="font-weight:bold; margin-bottom:5px; color:var(--accent-color);">7月京都氣候 TIPS：</div>
+                    京都盆地地形導致夏季極度悶熱（宛如蒸籠）。<br>
+                    午後常有突發性雷陣雨（夕立），請務必隨身攜帶輕便雨傘。<br>
+                    防曬與補水是每日最重要的事。
+                </div>
+            </div>
         </div>
         <div id="page-shopping" class="page">
-            <h3><i class="fa-solid fa-basket-shopping"></i> 購物清單</h3>
-            <div id="shopping-list"></div>
+            <div style="padding: 20px;">
+                <h2 style="font-family:'Shippori Mincho',serif; text-align:center;">今日購物建議</h2>
+                <p style="text-align:center; opacity:0.7; font-size:0.85rem; margin-bottom:20px;">根據當日行程地點推薦</p>
+               
+                <div id="daily-shopping-list"></div>
+                <div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
+                    <h3 style="color:#aaa; font-size:1rem;">全行程購物清單 (General)</h3>
+                    <div id="general-shopping-container"></div>
+                </div>
+            </div>
+        </div>
+        <div id="page-tools" class="page">
+            <h2 style="text-align:center; margin: 30px 0 20px 0; font-family:'Shippori Mincho',serif;">旅人百寶箱</h2>
+            <div class="tools-grid">
+                <div class="tool-btn" onclick="openSubPage('hotel')">
+                    <i class="fa-solid fa-bed"></i><span>酒店資訊</span>
+                </div>
+                <div class="tool-btn" onclick="openSubPage('packing')">
+                    <i class="fa-solid fa-suitcase"></i><span>行李清單</span>
+                </div>
+                <div class="tool-btn" onclick="switchMainPage('shopping')">
+                    <i class="fa-solid fa-basket-shopping"></i><span>查看購物</span>
+                </div>
+                <div class="tool-btn" onclick="openSubPage('rate')">
+                    <i class="fa-solid fa-yen-sign"></i><span>匯率換算</span>
+                </div>
+                <div class="tool-btn" onclick="openSubPage('safety')">
+                    <i class="fa-solid fa-user-shield"></i><span>安全報平安</span>
+                </div>
+                <div class="tool-btn" onclick="openTipsModal()">
+                    <i class="fa-regular fa-compass"></i><span>路痴救星</span>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:30px;">
+                <button onclick="history.back()" style="background:none; border:1px solid #777; color:#fff; padding:10px 20px; border-radius:20px;">關閉百寶箱</button>
+            </div>
+        </div>
+        <div id="subpage-hotel" class="sub-page">
+            <div class="sub-header"><button class="back-btn" onclick="closeSubPage('hotel')"><i class="fa-solid fa-arrow-left"></i></button><h2>酒店資訊</h2></div>
+            <div class="sub-content">
+                <h3 style="color:var(--accent-color); font-family:'Shippori Mincho',serif; margin-bottom:10px;">[酒店名稱範例]</h3>
+                <div style="font-size:0.9rem; opacity:0.8; margin-bottom:20px;">[酒店簡介範例]</div>
+               
+                <div class="note-box">
+                    <i class="fa-solid fa-location-dot" style="color:var(--accent-color)"></i> <b>地址：</b><br>
+                    [地址範例]<br>
+                    <span style="font-size:0.8rem; color:#666;">(英文地址)</span><br>
+                    <a href="https://www.google.com/maps/search/?api=1&query=34.9868,135.7599" target="_blank" class="link-btn" style="margin-top:8px;">開啟地圖</a>
+                </div>
+                <div class="checklist-item" style="opacity:1;">
+                    <i class="fa-regular fa-clock" style="color:var(--accent-color)"></i>
+                    <span><b>Check-in:</b> 15:00 起 / <b>Out:</b> 11:00 前</span>
+                </div>
+                <h4 style="border-bottom:1px solid #555; padding-bottom:5px; margin-top:25px;">特色</h4>
+                <ul style="padding-left:20px; line-height:1.6; font-size:0.95rem;">
+                    <li>[特色1範例]</li>
+                    <li>[特色2範例]</li>
+                </ul>
+            </div>
+        </div>
+        <div id="subpage-packing" class="sub-page">
+            <div class="sub-header"><button class="back-btn" onclick="closeSubPage('packing')"><i class="fa-solid fa-arrow-left"></i></button><h2>行李清單</h2></div>
+            <div class="sub-content" id="packing-list-container"></div>
+        </div>
+       
+        <div id="subpage-rate" class="sub-page">
+            <div class="sub-header"><button class="back-btn" onclick="closeSubPage('rate')"><i class="fa-solid fa-arrow-left"></i></button><h2>匯率換算</h2></div>
+            <div class="sub-content" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:80%;">
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; width:100%;">
+                    <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+                         <label style="font-size:0.8rem; color:#aaa;">匯率: <input type="number" id="rate-setting" value="0.052" step="0.001" style="width:60px; background:transparent; color:#fff; border:1px solid #555; text-align:center; border-radius:4px;"></label>
+                    </div>
+                    <label>日幣 (JPY)</label><input type="number" id="jpy-input" placeholder="¥" oninput="calcRate('jpy')" style="width: 100%; padding: 15px; margin: 10px 0; font-size: 1.2rem; background: rgba(0,0,0,0.3); border: 1px solid #555; color: white; border-radius: 8px; text-align: center;">
+                    <div style="text-align:center; font-size:1.5rem; margin:10px 0; color:var(--accent-color);">⇅</div>
+                    <label>港幣 (HKD)</label><input type="number" id="hkd-input" placeholder="$" oninput="calcRate('hkd')" style="width: 100%; padding: 15px; margin: 10px 0; font-size: 1.2rem; background: rgba(0,0,0,0.3); border: 1px solid #555; color: white; border-radius: 8px; text-align: center;">
+                </div>
+            </div>
+        </div>
+       
+        <div id="subpage-safety" class="sub-page">
+            <div class="sub-header"><button class="back-btn" onclick="closeSubPage('safety')"><i class="fa-solid fa-arrow-left"></i></button><h2>安全功能</h2></div>
+            <div class="sub-content">
+                <div style="text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #2E4B71, #1a2e47); border-radius: 16px; margin-bottom: 20px;" onclick="sendSafetyMessage()">
+                    <i class="fa-brands fa-whatsapp" style="font-size:3rem; color:white; margin-bottom:15px;"></i>
+                    <h3 style="margin:0 0 10px 0;">一鍵報平安 (WhatsApp)</h3>
+                    <p style="opacity:0.8; margin:0;">按此發送位置給家人</p>
+                </div>
+                <h3 style="border-bottom:1px solid #555; padding-bottom:10px; margin-top:30px;">緊急資訊</h3>
+                <div class="checklist-item" onclick="alert('110')"><i class="fa-solid fa-shield-halved" style="color:var(--accent-color);"></i><span>警察局: 110</span></div>
+                <div class="checklist-item" onclick="alert('119')"><i class="fa-solid fa-truck-medical" style="color:var(--accent-color);"></i><span>救護/消防: 119</span></div>
+            </div>
         </div>
     </main>
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="switchPage('itinerary', event)"><i class="fa-solid fa-calendar-days"></i>行程</div>
-        <div class="nav-item" onclick="switchPage('map', event)"><i class="fa-solid fa-map-location-dot"></i>地圖</div>
-        <div class="nav-item" onclick="switchPage('shopping', event)"><i class="fa-solid fa-list-check"></i>清單</div>
+        <div class="nav-item active" onclick="switchMainPage('itinerary', this)"><i class="fa-solid fa-calendar-days"></i> 行程</div>
+        <div class="nav-item" onclick="switchMainPage('map', this)"><i class="fa-solid fa-map-location-dot"></i> 地圖</div>
+        <div class="nav-item" onclick="switchMainPage('weather', this)"><i class="fa-solid fa-cloud-sun-rain"></i> 天氣</div>
+        <div class="nav-item" onclick="switchMainPage('shopping', this)"><i class="fa-solid fa-basket-shopping"></i> 購物</div>
     </nav>
-    <div id="detail-modal" class="modal" onclick="if(event.target===this)closeModal()">
+    <div id="detail-modal" class="modal">
         <div class="modal-content">
-            <h2 id="modal-title"></h2>
-            <p id="modal-time" style="color:var(--accent-color); font-weight:bold;"></p>
-            <p id="modal-address"></p>
-            <hr>
-            <div id="modal-note"></div>
-            <button class="btn-action" id="btn-google-map">Google 地圖導航</button>
+            <span class="close-modal" onclick="closeModal()">×</span>
+            <div class="modal-header"><h2 id="modal-title">標題</h2><span id="modal-type" class="sub">類型</span></div>
+            <div class="modal-body">
+               
+                <div id="taxi-card" class="taxi-card" style="display:none;">
+                    <p style="font-size:0.8rem; color:#666; margin:0 0 5px 0;">運転手さん、ここへお願いします</p>
+                    <h2 id="taxi-address" style="font-size:1.5rem; margin:5px 0; font-weight:bold; line-height:1.2;"></h2>
+                    <p id="taxi-name" style="font-size:1rem; margin-top:5px; color:#444;"></p>
+                </div>
+                <div class="info-row"><i class="fa-regular fa-clock"></i><span id="modal-time">時間</span></div>
+                <div class="info-row"><i class="fa-solid fa-location-dot"></i><span id="modal-address">地址</span></div>
+                <div class="info-row" id="modal-price-row"><i class="fa-solid fa-money-bill-wave"></i><span id="modal-price"></span></div>
+               
+                <div class="note-box">
+                    <div style="font-weight:bold; margin-bottom:8px; color:var(--accent-color);">攻略與 TIPS：</div>
+                    <span id="modal-note">內容...</span>
+                </div>
+                <div id="modal-links" style="margin-bottom: 20px;"></div>
+               
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:20px;">
+                     <button class="action-btn" id="modal-map-btn" style="margin-top:0;"><i class="fa-solid fa-map-location-dot"></i> Google 導航</button>
+                     <button class="action-btn" onclick="toggleTaxiCard()" style="margin-top:0; background:#444;"><i class="fa-solid fa-taxi"></i> 給司機看</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Form Modal -->
+    <div id="edit-form" class="edit-form" onclick="if(event.target===this)closeEditForm()">
+        <div class="edit-content">
+            <h3>添加新行程事件</h3>
+            <input type="text" id="edit-time" placeholder="時間 (e.g. 14:00 - 16:00)">
+            <input type="text" id="edit-title" placeholder="標題">
+            <input type="text" id="edit-type" placeholder="類型 (e.g. 美食)">
+            <input type="text" id="edit-price" placeholder="價格 (e.g. ¥2,000)">
+            <input type="text" id="edit-address" placeholder="地址">
+            <input type="text" id="edit-coords" placeholder="座標 (e.g. 34.9858,135.7588) - 可選">
+            <textarea id="edit-note" placeholder="筆記 (HTML支援)"></textarea>
+            <input type="text" id="edit-tags" placeholder="標籤 (逗號分隔, e.g. 美食,必去)">
+            <input type="text" id="edit-shopping" placeholder="購物項目 (逗號分隔)">
+            <input type="text" id="edit-link" placeholder="連結 (可選)">
+            <button onclick="saveNewEvent()">儲存</button>
         </div>
     </div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        "use strict";
-        /* =========================================
-           2. 行程資料 (要加入新行程只需改這裡)
-           ========================================= */
-        const TRIP_CONFIG = {
-            title: "京都祇園祭獨旅 2026",
-            schedule: {
-                "day1": {
-                    date: "7/15",
-                    label: "D1",
-                    events: [
-                        { time: "14:00", title: "抵達京都站", addr: "京都駅", coords: [34.9858, 135.7588], note: "利木津巴士下車點在八條口", tags: ["交通"] },
-                        { time: "16:00", title: "黃櫻 Kappa Country", addr: "京都市伏見区塩屋町228", coords: [34.9305, 135.7615], note: "推薦精釀啤酒與夏季限定清酒", tags: ["美食", "必去"] }
-                    ]
-                },
-                "day2": {
-                    date: "7/16",
-                    label: "D2",
-                    events: [
-                        { time: "20:00", title: "祇園祭 宵山", addr: "四条烏丸", coords: [35.0039, 135.7595], note: "人潮眾多，注意安全", tags: ["祭典"] }
-                    ]
-                }
+        // --- DATA: Template 版本，只保留少量演示資料。用戶可編輯 scheduleData 替換為自己的行程 ---
+        let scheduleData = {
+            "day1": {
+                "date": "7/15 (三)",
+                "events": [
+                    { time: "14:00 - 16:00", title: "抵達京都站 & Check-in", type: "交通/住宿", price: "¥2,600", address: "Dormy Inn Premium Kyoto Ekimae", coords: [34.9868, 135.7599], note: "<b>交通：</b>關西機場1F 8號搭利木津巴士。<br><b>路痴TIPS：</b>下車在八條口，抬頭找白色京都塔為正面。酒店在京都塔側。<br>15:00後Check-in，行李可寄放。", link: "https://www.klook.com/activity/1541-kix-airport-limousine-bus-transfer-kyoto/", tags: ["移動", "入住"], shopping_items: ["ICOCA (若需儲值)", "涼感濕紙巾", "鹽分補給糖"] },
+                    { time: "16:00 - 18:00", title: "黃櫻 Kappa Country", type: "清酒", price: "¥2,000", address: "伏見區塩屋町228", coords: [34.9305, 135.7615], note: "<b>必喝：</b>Lucky Cat/Dog 精釀啤酒、夏季柚子酒。<br><b>攻略：</b>河童主題館拍照，河邊座位品酒。<br>交通：近鐵桃山御陵前站步行7分。", tags: ["清酒", "河童"], shopping_items: ["黃櫻清酒", "河童周邊", "夏季酒套裝"] }
+                ]
             },
-            shopping: ["阿闍梨餅", "Shiro 香水", "日本藥妝", "清酒杯"]
+            "day2": {
+                "date": "7/16 (四)",
+                "events": [
+                    { time: "10:00 - 12:00", title: "月桂冠大倉紀念館", type: "景點", price: "¥600", address: "伏見區南浜町247", coords: [34.9298, 135.7618], note: "<b>重點：</b>試飲夏季冰鎮生酒。必喝中庭伏水井水。<br><b>攻略：</b>參觀釀造工具展。買生酒回酒店冰鎮。", link: "https://www.gekkeikan.com/museum/", tags: ["清酒", "歷史"], shopping_items: ["月桂冠生酒", "清酒杯"] },
+                    { time: "20:00 後", title: "祇園祭「宵山」步行", type: "祭典", price: "¥1,000", address: "四條烏丸", coords: [35.0039, 135.7595], note: "<b>必做：</b>去「長刀鉾」買個「粽」保平安。<br>今天是步行者天國，點燈山鉾很美。<br><span style='color:red;'><b>注意：</b>晚間核心區封路，計程車無法進入，需在烏丸通下車步行。</span>", tags: ["祭典", "必去", "交通管制"], shopping_items: ["長刀鉾 粽 (護身符)"] }
+                ]
+            }
+            // 加入更多日子時，請複製以上格式，並在 events 陣列中添加事件資料
         };
-        // --- 核心邏輯 (一般不需要改動) ---
+        const packingList = ["護照", "交通卡", "行動電源", "雨具"]; // 範例清單，可替換
+        const generalShoppingListItems = ["伴手禮1", "伴手禮2"]; // 範例全行程購物，可替換
         let currentDay = "day1";
         let map = null;
+        let markers = [];
+        let waterCount = 0;
+        // --- Logic ---
         function init() {
-            document.getElementById('trip-title').innerText = TRIP_CONFIG.title;
-            renderDates();
-            renderTimeline("day1");
-            renderShopping();
+            loadCustomData(); // Load from localStorage
+            renderDateSelector();
+            selectDay('day1', document.querySelector('.date-chip')); // Default Init
+            renderPackingList();
+            renderGeneralShoppingList();
             initMap();
+            fetchExchangeRate(); // Fetch real-time rate
         }
-        function renderDates() {
-            const container = document.getElementById('date-selector');
-            Object.keys(TRIP_CONFIG.schedule).forEach(key => {
-                const day = TRIP_CONFIG.schedule[key];
+        function loadCustomData() {
+            const saved = localStorage.getItem('scheduleData');
+            if (saved) {
+                const customData = JSON.parse(saved);
+                Object.keys(customData).forEach(day => {
+                    if (!scheduleData[day]) scheduleData[day] = customData[day];
+                    else scheduleData[day].events = [...scheduleData[day].events, ... (customData[day].events || [])];
+                });
+            }
+        }
+        function saveCustomData() {
+            localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+        }
+        function switchMainPage(pageId, navEl) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+           
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(navEl) {
+                navEl.classList.add('active');
+            } else {
+                const idx = ['itinerary', 'map', 'weather', 'shopping'].indexOf(pageId);
+                if(idx !== -1) document.querySelectorAll('.nav-item')[idx].classList.add('active');
+            }
+            if(pageId === 'map' && map) {
+                setTimeout(() => { map.invalidateSize(); fitMapToDay(); }, 200);
+            }
+        }
+        function openToolsPage() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-tools').classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        }
+        function openSubPage(id) { document.getElementById('subpage-' + id).classList.add('open'); }
+        function closeSubPage(id) { document.getElementById('subpage-' + id).classList.remove('open'); }
+        function renderDateSelector() {
+            const container = document.getElementById('date-selector'); container.innerHTML = '';
+            Object.keys(scheduleData).forEach(dayKey => {
+                const dayInfo = scheduleData[dayKey];
+                const dayNum = dayKey.replace('day', '');
                 const chip = document.createElement('div');
-                chip.className = `date-chip ${key === 'day1' ? 'active' : ''}`;
-                chip.innerHTML = `<b>${day.label}</b><br>${day.date}`;
-                chip.onclick = () => {
-                    document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active'));
-                    chip.classList.add('active');
-                    currentDay = key;
-                    renderTimeline(key);
-                    updateMapMarkers(key);
-                };
+                chip.className = `date-chip ${dayKey === 'day1' ? 'active' : ''}`;
+                chip.onclick = () => selectDay(dayKey, chip);
+                chip.innerHTML = `<span class="day-num">D${dayNum}</span><span class="day-week">${dayInfo.date.split(' ')[0]}</span>`;
                 container.appendChild(chip);
             });
         }
+        function selectDay(dayKey, chipEl) {
+            currentDay = dayKey;
+            document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active'));
+            chipEl.classList.add('active');
+           
+            renderTimeline(dayKey);
+            renderWeather(dayKey);
+            renderDailyShopping(dayKey);
+            if(map) updateMapMarkers(dayKey);
+        }
         function renderTimeline(dayKey) {
-            const container = document.getElementById('timeline-container');
-            container.innerHTML = `<h3>${TRIP_CONFIG.schedule[dayKey].date} 行程</h3>`;
-            TRIP_CONFIG.schedule[dayKey].events.forEach(ev => {
-                const item = document.createElement('div');
-                item.className = 'timeline-item';
-                item.innerHTML = `
-                    <div class="card" onclick='openModal(${JSON.stringify(ev)})'>
-                        <div class="card-time">${ev.time}</div>
-                        <div class="card-title">${ev.title}</div>
-                        ${ev.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-                    </div>
-                `;
+            const container = document.getElementById('timeline-container'); container.innerHTML = '';
+            const dayTitle = document.createElement('h3'); dayTitle.style.marginBottom='20px';
+            dayTitle.innerHTML = `<span style="color:var(--accent-color); font-family:'Shippori Mincho',serif;">${scheduleData[dayKey].date}</span>`;
+            container.appendChild(dayTitle);
+            scheduleData[dayKey].events.forEach(event => {
+                const item = document.createElement('div'); item.className = 'timeline-item';
+                let tagsHtml = event.tags.map(t => {
+                    let c = 'card-tag';
+                    if(t.includes('必')||t.includes('路痴')||t.includes('重點')) c+=' highlight';
+                    if(t.includes('管制')) c+=' alert';
+                    return `<span class="${c}">${t}</span>`;
+                }).join('');
+               
+                let priceHtml = event.price ? `<div class="card-price">${event.price}</div>` : '';
+                item.innerHTML = `<div class="card" onclick='openEventModal(${JSON.stringify(event)})'>
+                    <span class="card-time">${event.time}</span>
+                    <h3 class="card-title">${event.title}</h3>
+                    <div class="tags">${tagsHtml}</div>
+                    ${priceHtml}
+                </div>`;
                 container.appendChild(item);
             });
         }
-        function renderShopping() {
-            const container = document.getElementById('shopping-list');
-            TRIP_CONFIG.shopping.forEach(item => {
-                const div = document.createElement('div');
-                div.style = "background:rgba(255,255,255,0.05); padding:15px; margin-bottom:10px; border-radius:8px;";
-                div.innerHTML = `
-                    <input type="checkbox"> <span style="margin-left:10px">${item}</span>
+        async function renderWeather(dayKey) {
+            const container = document.getElementById('weather-content');
+            container.innerHTML = '<p>Loading weather...</p>';
+            try {
+                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=35.0116&longitude=135.7681&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo');
+                const data = await response.json();
+                const current = data.current;
+                const daily = data.daily;
+                
+                let icon = "fa-cloud-sun";
+                let desc = "多雲";
+                if (current.weather_code === 0) { icon = "fa-sun"; desc = "晴朗"; }
+                else if (current.weather_code >= 1 && current.weather_code <= 3) { icon = "fa-cloud"; desc = "多雲"; }
+                else if (current.weather_code >= 51) { icon = "fa-cloud-rain"; desc = "有雨"; }
+                
+                const temp = Math.round(current.temperature_2m);
+                const humidity = current.relative_humidity_2m;
+                const rainChance = daily.precipitation_probability_max[0];
+                
+                container.innerHTML = `
+                    <div class="weather-card">
+                        <div style="font-size:0.9rem; opacity:0.9;">${scheduleData[dayKey].date} • 京都</div>
+                        <div class="weather-main">
+                            <div class="weather-icon"><i class="fa-solid ${icon}"></i></div>
+                            <div class="weather-temp">${temp}°C</div>
+                        </div>
+                        <div style="font-size:1.2rem; margin-bottom:15px;">${desc}</div>
+                        <div class="weather-grid">
+                            <div class="w-item"><i class="fa-solid fa-droplet"></i> 濕度 ${humidity}%</div>
+                            <div class="w-item"><i class="fa-solid fa-umbrella"></i> 降雨 ${rainChance}%</div>
+                            <div class="w-item"><i class="fa-solid fa-wind"></i> 風速 ${current.wind_speed_10m} km/h</div>
+                            <div class="w-item"><i class="fa-solid fa-temperature-arrow-up"></i> 體感 ${temp + 2}°</div>
+                        </div>
+                    </div>
                 `;
-                container.appendChild(div);
-            });
-        }
-        function switchPage(pageId, event) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active');
-            event.currentTarget.classList.add('active');
-            if(pageId === 'map') {
-                setTimeout(() => { map.invalidateSize(); updateMapMarkers(currentDay); }, 200);
+            } catch (error) {
+                container.innerHTML = '<p>無法載入天氣數據，請檢查網路。</p>';
             }
         }
-        function openModal(ev) {
-            document.getElementById('modal-title').innerText = ev.title;
-            document.getElementById('modal-time').innerText = ev.time;
-            document.getElementById('modal-address').innerText = ev.addr;
-            document.getElementById('modal-note').innerHTML = ev.note;
-            document.getElementById('btn-google-map').onclick = () => {
-                window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ev.addr)}`);
-            };
-            document.getElementById('detail-modal').style.display = 'flex';
+       
+        function addWater() {
+            waterCount++;
+            document.getElementById('water-count').innerText = waterCount;
         }
-        function closeModal() { document.getElementById('detail-modal').style.display = 'none'; }
-        function initMap() {
-            map = L.map('map-container').setView([35.00, 135.75], 13);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-        }
-        function updateMapMarkers(dayKey) {
-            map.eachLayer(l => { if(l instanceof L.Marker) map.removeLayer(l); });
-            const events = TRIP_CONFIG.schedule[dayKey].events;
-            const pts = [];
-            events.forEach(ev => {
-                if(ev.coords) {
-                    L.marker(ev.coords).addTo(map).bindPopup(ev.title);
-                    pts.push(ev.coords);
+        function renderDailyShopping(dayKey) {
+            const container = document.getElementById('daily-shopping-list');
+            container.innerHTML = '';
+           
+            const events = scheduleData[dayKey].events;
+            let hasItems = false;
+            events.forEach(event => {
+                if (event.shopping_items && event.shopping_items.length > 0) {
+                    hasItems = true;
+                    const group = document.createElement('div');
+                    group.className = 'shopping-group';
+                   
+                    let itemsHtml = '';
+                    event.shopping_items.forEach((item, i) => {
+                        const id = `shop-${dayKey}-${event.title}-${i}`;
+                        itemsHtml += `<div class="checklist-item" onclick="toggleCheck(this)">
+                            <input type="checkbox" id="${id}">
+                            <label for="${id}"><span>${item}</span></label>
+                        </div>`;
+                    });
+                    group.innerHTML = `<h4 class="shopping-section-title"><i class="fa-solid fa-location-dot"></i> ${event.title}</h4>${itemsHtml}`;
+                    container.appendChild(group);
                 }
             });
-            if(pts.length > 0) {
-                map.fitBounds(pts, {padding: [50,50]});
-            } else {
-                // 處理無點情況，恢復預設視圖
-                map.setView([35.00, 135.75], 13);
+            if (!hasItems) {
+                container.innerHTML = `<div style="text-align:center; padding:30px; opacity:0.5;">
+                    <i class="fa-solid fa-bag-shopping" style="font-size:2rem; margin-bottom:10px;"></i><br>
+                    本日以觀光為主，無特定購物建議
+                </div>`;
             }
+        }
+        function renderGeneralShoppingList() {
+            const container = document.getElementById('general-shopping-container');
+            generalShoppingListItems.forEach((item,i) => {
+                container.innerHTML += `<div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox" id="g${i}"><label for="g${i}"><span>${item}</span></label></div>`;
+            });
+        }
+        function renderPackingList() {
+            const pC = document.getElementById('packing-list-container');
+            pC.innerHTML = '';
+            packingList.forEach((item,i) => pC.innerHTML += `<div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox" id="p${i}"><label for="p${i}"><span>${item}</span></label></div>`);
+        }
+        function toggleCheck(el) { const i = el.querySelector('input'); i.checked = !i.checked; el.classList.toggle('checked', i.checked); }
+        async function fetchExchangeRate() {
+            try {
+                const response = await fetch('https://api.frankfurter.app/latest?amount=1&from=JPY&to=HKD');
+                const data = await response.json();
+                const rate = data.rates.HKD;
+                document.getElementById('rate-setting').value = rate.toFixed(3);
+            } catch (error) {
+                console.error('Failed to fetch exchange rate:', error);
+            }
+        }
+        function calcRate(type) {
+            const rate = parseFloat(document.getElementById('rate-setting').value) || 0.052;
+            const jpy = document.getElementById('jpy-input');
+            const hkd = document.getElementById('hkd-input');
+           
+            if(type==='jpy') {
+                if(jpy.value === '') hkd.value = '';
+                else hkd.value = (jpy.value * rate).toFixed(1);
+            } else {
+                if(hkd.value === '') jpy.value = '';
+                else jpy.value = (hkd.value / rate).toFixed(0);
+            }
+        }
+        function sendSafetyMessage() {
+             if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    const link = `https://www.google.com/maps/search/?api=1&query=${pos.coords.latitude},${pos.coords.longitude}`;
+                    window.open(`https://wa.me/?text=${encodeURIComponent("Hello! 我在京都一切安好，目前位置：" + link)}`, '_blank');
+                });
+            } else alert("無法獲取定位");
+        }
+        function openEventModal(event) {
+            document.getElementById('modal-title').innerText = event.title;
+            document.getElementById('modal-type').innerText = event.type;
+            document.getElementById('modal-time').innerText = event.time;
+            document.getElementById('modal-address').innerText = event.address;
+            document.getElementById('modal-note').innerHTML = event.note;
+           
+            document.getElementById('taxi-address').innerText = event.address;
+            document.getElementById('taxi-name').innerText = event.title;
+            document.getElementById('taxi-card').style.display = 'none';
+            const priceRow = document.getElementById('modal-price-row');
+            if (event.price) {
+                priceRow.style.display = 'flex';
+                document.getElementById('modal-price').innerText = "預算/門票：" + event.price;
+            } else {
+                priceRow.style.display = 'none';
+            }
+            const lc = document.getElementById('modal-links'); lc.innerHTML = '';
+            if(event.link) lc.innerHTML = `<a href="${event.link}" target="_blank" class="link-btn"><i class="fa-solid fa-link"></i> 預約/詳情</a>`;
+           
+            let mapUrl = "";
+            if(event.coords) {
+                mapUrl = `https://www.google.com/maps/search/?api=1&query=${event.coords[0]},${event.coords[1]}`;
+            } else {
+                const q = encodeURIComponent(event.address + " " + event.title);
+                mapUrl = `https://www.google.com/maps/search/?api=1&query=${q}`;
+            }
+            document.getElementById('modal-map-btn').onclick = () => window.open(mapUrl, '_blank');
+            document.getElementById('detail-modal').classList.add('open');
+        }
+       
+        function toggleTaxiCard() {
+            const card = document.getElementById('taxi-card');
+            card.style.display = card.style.display === 'none' ? 'block' : 'none';
+        }
+        function closeModal() { document.getElementById('detail-modal').classList.remove('open'); }
+        document.getElementById('detail-modal').addEventListener('click', function(e){if(e.target===this)closeModal()});
+        function openTipsModal() { openEventModal({title:"路痴救星",type:"TIPS",time:"隨時",address:"京都全區",note:"1.京都塔在北邊 (車站正面)<br>2.公車後門上車，前門付款<br>3.善用Google Live View AR導航<br>4.迷路就搭計程車 (門自動開)", tags:[]}); }
+        // --- Map Logic ---
+        function initMap() {
+            map = L.map('map-container');
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+            updateMapMarkers(currentDay);
+        }
+        function updateMapMarkers(dayKey) {
+            if(!map) return;
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+           
+            const events = scheduleData[dayKey].events;
+            const group = new L.featureGroup();
+            events.forEach(event => {
+                if(event.coords) {
+                    const navUrl = `https://www.google.com/maps/search/?api=1&query=${event.coords[0]},${event.coords[1]}`;
+                    const popupContent = `
+                        <div style="text-align:center">
+                            <b>${event.title}</b><br>${event.time}<br>
+                            <a href="${navUrl}" target="_blank" style="display:inline-block; margin-top:5px; color:#E95464; text-decoration:none; font-weight:bold;">
+                                <i class="fa-solid fa-location-arrow"></i> 導航
+                            </a>
+                        </div>
+                    `;
+                    const m = L.marker(event.coords).addTo(map).bindPopup(popupContent);
+                    markers.push(m);
+                    group.addLayer(m);
+                }
+            });
+            if(markers.length > 0) {
+                map.fitBounds(group.getBounds(), {padding: [50, 50]});
+            } else {
+                map.setView([35.0000, 135.7600], 13);
+            }
+        }
+       
+        function fitMapToDay() {
+            if(map && markers.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds(), {padding: [50, 50]});
+            }
+        }
+        // --- Edit Form Logic ---
+        function openEditForm() {
+            document.getElementById('edit-form').classList.add('open');
+        }
+        function closeEditForm() {
+            document.getElementById('edit-form').classList.remove('open');
+        }
+        async function saveNewEvent() {
+            const newEvent = {
+                time: document.getElementById('edit-time').value,
+                title: document.getElementById('edit-title').value,
+                type: document.getElementById('edit-type').value,
+                price: document.getElementById('edit-price').value,
+                address: document.getElementById('edit-address').value,
+                note: document.getElementById('edit-note').value,
+                tags: document.getElementById('edit-tags').value.split(',').map(t => t.trim()),
+                shopping_items: document.getElementById('edit-shopping').value.split(',').map(i => i.trim()),
+                link: document.getElementById('edit-link').value
+            };
+            const coordsStr = document.getElementById('edit-coords').value;
+            if (coordsStr) {
+                newEvent.coords = coordsStr.split(',').map(c => parseFloat(c.trim()));
+            } else if (newEvent.address) {
+                // Try to geocode address using Nominatim (OpenStreetMap)
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(newEvent.address + ', Kyoto, Japan')}`);
+                    const data = await response.json();
+                    if (data.length > 0) {
+                        newEvent.coords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+                    }
+                } catch (error) {
+                    console.error('Geocoding failed:', error);
+                }
+            }
+            if (!scheduleData[currentDay]) {
+                scheduleData[currentDay] = { date: "[日期範例]", events: [] };
+            }
+            scheduleData[currentDay].events.push(newEvent);
+            saveCustomData();
+            renderDateSelector(); // 更新日期選擇器，如果新增日子
+            renderTimeline(currentDay);
+            renderDailyShopping(currentDay);
+            updateMapMarkers(currentDay);
+            closeEditForm();
+            // Clear form
+            document.querySelectorAll('.edit-content input, .edit-content textarea').forEach(el => el.value = '');
         }
         init();
     </script>
