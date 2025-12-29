@@ -6,21 +6,22 @@
     <title>Travel App Template</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
-   
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
     <style>
         :root {
-            --bg-color: #3E3C3A; /* 煤竹色 */
-            --card-color: #E8E8E8; /* 灰白 */
-            --accent-color: #E95464; /* 朱紅 */
-            --text-on-dark: #FFFFFB; /* 象牙白 */
-            --text-on-light: #2F2F2F; /* 墨黑 */
-            --menu-bg: #2b2a29;
-            --weather-gradient: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            --bg-color: #dbc6ae; /* 米白 - 主色調，營造寧靜大地感 */
+            --card-color: #f5f0e8; /* 柔和米白變體，避免過度對比 */
+            --accent-color: #d44601; /* 溫暖橙 - 輔助色，代表日落 */
+            --text-on-dark: #5c0d09; /* 深紅 - 輔助色，用於淺背景上的文字 */
+            --text-on-light: #177263; /* 柔藍 - 輔助色，用於深背景上的文字 */
+            --menu-bg: #52c0a7; /* 柔和綠 - 主色調，代表稻田與自然 */
+            --weather-gradient: linear-gradient(135deg, #52c0a7 0%, #177263 100%); /* 柔和綠到柔藍漸層，象徵水淨化與寧靜 */
+            --highlight-gold: #c5a35f; /* 金屬金/古銅 - 點綴色，用於奢華細節 */
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: "Noto Sans TC", sans-serif;
+            font-family: "Montserrat", sans-serif; /* 簡約sans-serif正文字體 */
             background-color: var(--bg-color);
             color: var(--text-on-dark);
             margin: 0; padding: 0;
@@ -30,14 +31,16 @@
         /* --- Header --- */
         header {
             padding: 15px 20px;
-            background-color: rgba(62, 60, 58, 0.98);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background-color: rgba(219, 198, 174, 0.98); /* 米白變體，透明以融入寧靜氛圍 */
+            border-bottom: 1px solid rgba(82, 192, 167, 0.2); /* 柔和綠邊框 */
             position: sticky; top: 0; z-index: 100;
             display: flex; justify-content: space-between; align-items: center;
             height: 60px;
         }
-        header h1 { margin: 0; font-size: 1.2rem; font-family: "Shippori Mincho", serif; letter-spacing: 1px; }
-       
+        header h1 { margin: 0; font-size: 1.2rem; font-family: "Playfair Display", serif; /* 優雅serif標題字體，帶復古弧線 */
+            letter-spacing: 1px; color: var(--highlight-gold); /* 點綴金色 */
+        }
+      
         .header-icons { display: flex; gap: 20px; align-items: center; }
         .header-btn { color: var(--text-on-dark); font-size: 1.2rem; cursor: pointer; text-decoration: none; position: relative;}
         .fan-btn i { color: var(--accent-color); }
@@ -45,23 +48,25 @@
         .date-selector-container {
             background: var(--bg-color); z-index: 90;
             padding: 10px 20px 10px 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* 輕柔陰影，避免繁雜 */
         }
         .date-selector {
             display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
         }
         .date-selector::-webkit-scrollbar { display: none; }
-       
+      
         .date-chip {
-            background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 16px;
-            white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: #aaa;
+            background: rgba(82, 192, 167, 0.2); /* 柔和綠透明 */
+            padding: 8px 12px; border-radius: 20px; /* 圓潤邊角，符合復古香氛流暢感 */
+            white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: var(--text-on-dark);
             display: flex; flex-direction: column; align-items: center; min-width: 55px;
-            transition: all 0.2s; border: 1px solid transparent;
+            transition: all 0.2s ease; /* 緩慢轉換，體現慢活 */
+            border: 1px solid transparent;
         }
         .date-chip.active {
             background: var(--accent-color); color: #fff;
-            box-shadow: 0 0 10px rgba(233, 84, 100, 0.4); transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(212, 70, 1, 0.3); transform: scale(1.05);
         }
         /* --- Main Content --- */
         main { flex: 1; overflow-y: hidden; position: relative; }
@@ -73,7 +78,7 @@
             -webkit-overflow-scrolling: touch;
         }
         .page.active { display: block; opacity: 1; z-index: 10; }
-       
+      
         /* Map Page Specific */
         #page-map { padding: 0 0 80px 0; }
         #map-container { width: 100%; height: 100%; }
@@ -87,11 +92,13 @@
         .sub-page.open { transform: translateX(0); }
         .sub-header {
             padding: 15px 20px; background: var(--menu-bg);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(23, 114, 99, 0.2); /* 柔藍邊框 */
             display: flex; align-items: center; gap: 15px;
         }
         .back-btn { font-size: 1.2rem; color: var(--accent-color); background: none; border: none; padding: 5px; cursor: pointer;}
-        .sub-header h2 { margin: 0; font-size: 1.1rem; font-family: "Shippori Mincho", serif; }
+        .sub-header h2 { margin: 0; font-size: 1.1rem; font-family: "Playfair Display", serif; /* 標題字體 */
+            color: var(--highlight-gold); /* 點綴金色 */
+        }
         .sub-content {
             flex: 1; overflow-y: auto; padding: 20px;
             -webkit-overflow-scrolling: touch;
@@ -100,39 +107,45 @@
         .timeline-container { padding: 0 20px; }
         .timeline-item {
             position: relative; padding-left: 25px; padding-bottom: 30px;
-            border-left: 2px solid rgba(233, 84, 100, 0.3);
+            border-left: 2px solid rgba(212, 70, 1, 0.3); /* 溫暖橙邊線 */
         }
         .timeline-item:last-child { border-left: 2px solid transparent; padding-bottom: 0; }
         .timeline-item::before {
             content: ''; position: absolute; left: -6px; top: 18px;
             width: 10px; height: 10px; background: var(--accent-color);
-            border-radius: 50%; box-shadow: 0 0 0 4px rgba(62, 60, 58, 1);
+            border-radius: 50%; box-shadow: 0 0 0 4px rgba(219, 198, 174, 0.5); /* 米白環繞 */
         }
         .card {
-            background-color: var(--card-color); color: var(--text-on-light);
-            border-radius: 12px; padding: 16px; margin-bottom: 5px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2); cursor: pointer;
+            background-color: var(--card-color); color: var(--text-on-dark);
+            border-radius: 16px; /* 圓潤邊角 */
+            padding: 16px; margin-bottom: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 輕柔陰影 */
+            cursor: pointer;
             position: relative;
         }
         .card:active { transform: scale(0.98); }
         .card-time { font-size: 0.85rem; color: var(--accent-color); font-weight: 700; display: block; margin-bottom: 6px; }
-        .card-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 8px 0; font-family: "Shippori Mincho", serif; line-height: 1.4; padding-right: 10px;}
+        .card-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 8px 0; font-family: "Playfair Display", serif; /* 標題字體 */
+            line-height: 1.4; padding-right: 10px; color: var(--highlight-gold); /* 點綴金色 */
+        }
         .card-price {
             position: absolute; bottom: 12px; right: 15px;
-            font-weight: bold; color: #d63345; font-size: 0.9rem;
-            background: rgba(255,255,255,0.6); padding: 2px 6px; border-radius: 4px;
+            font-weight: bold; color: var(--text-on-light); font-size: 0.9rem;
+            background: rgba(82, 192, 167, 0.3); /* 柔和綠背景 */
+            padding: 2px 6px; border-radius: 4px;
         }
         .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; max-width: 70%; }
-        .card-tag { font-size: 0.7rem; background: #D0D0D0; padding: 3px 8px; border-radius: 4px; color: #444; }
-        .card-tag.highlight { background: #ffe4e6; color: #d63345; border: 1px solid #fab1b8; }
-        .card-tag.tips { background: #e0f2fe; color: #0369a1; }
-        .card-tag.alert { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; font-weight: bold;}
+        .card-tag { font-size: 0.7rem; background: rgba(219, 198, 174, 0.5); /* 米白背景 */
+            padding: 3px 8px; border-radius: 4px; color: var(--text-on-dark); }
+        .card-tag.highlight { background: rgba(212, 70, 1, 0.4); color: #fff; border: 1px solid var(--accent-color); }
+        .card-tag.tips { background: rgba(23, 114, 99, 0.4); color: #fff; }
+        .card-tag.alert { background: rgba(92, 13, 9, 0.4); color: #fff; border: 1px solid var(--text-on-dark); font-weight: bold;}
         /* --- Weather Styles --- */
         .weather-card {
             background: var(--weather-gradient);
             border-radius: 16px; padding: 25px; margin: 20px;
             text-align: center; color: white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* 輕柔陰影 */
         }
         .weather-main { display: flex; justify-content: space-around; align-items: center; margin: 20px 0; }
         .weather-icon { font-size: 3.5rem; }
@@ -140,63 +153,70 @@
         .weather-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; }
         .w-item { font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
         /* --- Shopping Styles --- */
-        .shopping-section-title { font-family: "Shippori Mincho", serif; margin: 0 0 10px 0; color: var(--accent-color); border-bottom: 1px solid #555; padding-bottom: 5px;}
-        .shopping-group { margin-bottom: 25px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; }
+        .shopping-section-title { font-family: "Playfair Display", serif; /* 標題字體 */
+            margin: 0 0 10px 0; color: var(--accent-color); border-bottom: 1px solid rgba(82, 192, 167, 0.3); /* 柔和綠 */
+            padding-bottom: 5px;}
+        .shopping-group { margin-bottom: 25px; background: rgba(82, 192, 167, 0.05); /* 柔和綠透明 */
+            padding: 15px; border-radius: 12px; }
         /* --- Tools Grid --- */
         .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 10px; }
         .tool-btn {
-            background: rgba(255,255,255,0.08); padding: 25px 15px;
+            background: rgba(82, 192, 167, 0.1); /* 柔和綠 */
+            padding: 25px 15px;
             border-radius: 16px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.05); cursor: pointer;
+            border: 1px solid rgba(23, 114, 99, 0.1); cursor: pointer;
         }
         .tool-btn i { font-size: 2.2rem; color: var(--accent-color); margin-bottom: 12px; display: block; }
         /* --- Lists --- */
         .checklist-item {
-            background: rgba(255,255,255,0.08); padding: 15px; margin-bottom: 12px;
+            background: rgba(82, 192, 167, 0.08); padding: 15px; margin-bottom: 12px;
             border-radius: 8px; display: flex; align-items: center; gap: 15px;
         }
         .checklist-item.checked { opacity: 0.5; }
         .checklist-item.checked span { text-decoration: line-through; }
         .checklist-item input { width: 22px; height: 22px; accent-color: var(--accent-color); }
-       
+      
         /* --- Footer --- */
         nav.bottom-nav {
             position: fixed; bottom: 0; width: 100%;
             background-color: var(--menu-bg);
             display: flex; justify-content: space-around;
-            padding: 10px 0 25px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 100;
+            padding: 10px 0 25px 0; border-top: 1px solid rgba(23, 114, 99, 0.2);
+            z-index: 100;
         }
-        .nav-item { color: #888; text-align: center; font-size: 0.75rem; cursor: pointer; width: 25%; }
+        .nav-item { color: var(--text-on-light); text-align: center; font-size: 0.75rem; cursor: pointer; width: 25%; }
         .nav-item i { display: block; font-size: 1.4rem; margin-bottom: 4px; }
-        .nav-item.active { color: var(--accent-color); }
+        .nav-item.active { color: var(--highlight-gold); /* 點綴金色 */ }
         /* --- Modal --- */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 3000;
+            background: rgba(0,0,0,0.7); z-index: 3000;
             justify-content: center; align-items: end; backdrop-filter: blur(3px);
         }
         .modal.open { display: flex; }
         .modal-content {
-            background: var(--card-color); color: var(--text-on-light);
+            background: var(--card-color); color: var(--text-on-dark);
             width: 100%; max-width: 600px; max-height: 85vh;
             border-radius: 20px 20px 0 0; padding: 25px;
             overflow-y: auto; animation: slideUp 0.3s ease;
             -webkit-overflow-scrolling: touch;
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: #888; cursor: pointer; }
-       
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: var(--text-on-light); cursor: pointer; }
+      
         .info-row { margin: 12px 0; display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; line-height: 1.6; }
         .info-row i { color: var(--accent-color); margin-top: 4px; width: 20px; text-align: center; }
         .note-box {
-            background: #f8f8f8; border-left: 4px solid var(--accent-color);
+            background: rgba(219, 198, 174, 0.5); /* 米白背景 */
+            border-left: 4px solid var(--accent-color);
             padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0;
-            font-size: 0.95rem; color: #333; line-height: 1.7;
+            font-size: 0.95rem; color: var(--text-on-dark); line-height: 1.7;
         }
         .link-btn {
-            display: inline-block; background: #eee; color: #333;
+            display: inline-block; background: rgba(82, 192, 167, 0.3); /* 柔和綠 */
+            color: var(--text-on-dark);
             padding: 6px 12px; border-radius: 4px; text-decoration: none;
-            font-size: 0.85rem; margin-top: 5px; border: 1px solid #ccc;
+            font-size: 0.85rem; margin-top: 5px; border: 1px solid var(--menu-bg);
         }
         .action-btn {
             display: flex; justify-content: center; align-items: center; gap: 8px;
@@ -205,19 +225,19 @@
             text-decoration: none; border-radius: 10px;
             font-weight: bold; font-size: 1rem; border: none; cursor: pointer;
         }
-       
+      
         /* Taxi Card */
         .taxi-card {
-            background: #fff; color: #000; padding: 20px;
-            border: 4px solid #000; margin: 15px 0;
+            background: var(--card-color); color: var(--text-on-dark); padding: 20px;
+            border: 4px solid var(--highlight-gold); /* 點綴金色邊框 */
+            margin: 15px 0;
             text-align: center; border-radius: 8px;
         }
-
         /* Edit Form Styles */
         .edit-form { display: none; padding: 20px; background: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2500; justify-content: center; align-items: center; }
         .edit-form.open { display: flex; }
-        .edit-content { background: white; color: black; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; }
-        .edit-content input, .edit-content textarea { width: 100%; margin: 10px 0; padding: 8px; }
+        .edit-content { background: var(--card-color); color: var(--text-on-dark); padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; }
+        .edit-content input, .edit-content textarea { width: 100%; margin: 10px 0; padding: 8px; background: rgba(219, 198, 174, 0.3); border: 1px solid var(--menu-bg); color: var(--text-on-dark); }
         .edit-content button { background: var(--accent-color); color: white; border: none; padding: 10px; width: 100%; cursor: pointer; }
     </style>
 </head>
@@ -242,27 +262,27 @@
     <main>
         <div id="page-itinerary" class="page active">
             <div class="timeline-container" id="timeline-container" style="padding-top: 20px;"></div>
-            <div style="text-align:center; color:#666; font-size:0.8rem; margin:30px 0;">平安喜樂 • 滿載而歸</div>
+            <div style="text-align:center; color:var(--text-on-light); font-size:0.8rem; margin:30px 0;">平安喜樂 • 滿載而歸</div>
         </div>
         <div id="page-map" class="page">
             <div id="map-container"></div>
-            <div style="position:absolute; bottom:90px; left:10px; background:rgba(255,255,255,0.9); padding:8px 12px; border-radius:8px; color:#333; font-size:0.8rem; box-shadow:0 2px 5px rgba(0,0,0,0.3); pointer-events:none; z-index:999;">
+            <div style="position:absolute; bottom:90px; left:10px; background:rgba(219,198,174,0.9); padding:8px 12px; border-radius:8px; color:var(--text-on-dark); font-size:0.8rem; box-shadow:0 2px 5px rgba(0,0,0,0.1); pointer-events:none; z-index:999;">
                 <i class="fa-solid fa-location-dot" style="color:var(--accent-color)"></i> 顯示當日行程地點
             </div>
         </div>
         <div id="page-weather" class="page">
             <div style="padding: 20px;">
-                <h2 style="font-family:'Shippori Mincho',serif; text-align:center; margin-bottom:10px;">當日天氣預報</h2>
+                <h2 style="font-family:'Playfair Display',serif; text-align:center; margin-bottom:10px;">當日天氣預報</h2>
                 <div id="weather-content"></div>
-               
-                <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:12px; margin:20px 0; display:flex; align-items:center; justify-content:space-between; border:1px solid rgba(255,255,255,0.1);">
+              
+                <div style="background:rgba(82,192,167,0.1); padding:15px; border-radius:12px; margin:20px 0; display:flex; align-items:center; justify-content:space-between; border:1px solid rgba(23,114,99,0.1);">
                     <div>
                         <div style="font-weight:bold; color:var(--accent-color);"><i class="fa-solid fa-glass-water"></i> 水分補給 Check</div>
                         <div style="font-size:0.8rem; opacity:0.7; margin-top:4px;">喝酒前請先喝水</div>
                     </div>
                     <div style="display:flex; gap:15px; align-items:center;">
                         <button onclick="addWater()" style="background:var(--accent-color); border:none; color:white; width:45px; height:45px; border-radius:50%; font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-plus"></i></button>
-                        <span id="water-count" style="font-size:2rem; font-family:'Shippori Mincho',serif; min-width:30px; text-align:center;">0</span>
+                        <span id="water-count" style="font-size:2rem; font-family:'Playfair Display',serif; min-width:30px; text-align:center;">0</span>
                     </div>
                 </div>
                 <div class="note-box">
@@ -275,18 +295,18 @@
         </div>
         <div id="page-shopping" class="page">
             <div style="padding: 20px;">
-                <h2 style="font-family:'Shippori Mincho',serif; text-align:center;">今日購物建議</h2>
+                <h2 style="font-family:'Playfair Display',serif; text-align:center;">今日購物建議</h2>
                 <p style="text-align:center; opacity:0.7; font-size:0.85rem; margin-bottom:20px;">根據當日行程地點推薦</p>
-               
+              
                 <div id="daily-shopping-list"></div>
-                <div style="margin-top:40px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
-                    <h3 style="color:#aaa; font-size:1rem;">全行程購物清單 (General)</h3>
+                <div style="margin-top:40px; border-top:1px solid rgba(23,114,99,0.1); padding-top:20px;">
+                    <h3 style="color:var(--text-on-light); font-size:1rem;">全行程購物清單 (General)</h3>
                     <div id="general-shopping-container"></div>
                 </div>
             </div>
         </div>
         <div id="page-tools" class="page">
-            <h2 style="text-align:center; margin: 30px 0 20px 0; font-family:'Shippori Mincho',serif;">旅人百寶箱</h2>
+            <h2 style="text-align:center; margin: 30px 0 20px 0; font-family:'Playfair Display',serif;">旅人百寶箱</h2>
             <div class="tools-grid">
                 <div class="tool-btn" onclick="openSubPage('hotel')">
                     <i class="fa-solid fa-bed"></i><span>酒店資訊</span>
@@ -308,26 +328,26 @@
                 </div>
             </div>
             <div style="text-align:center; margin-top:30px;">
-                <button onclick="history.back()" style="background:none; border:1px solid #777; color:#fff; padding:10px 20px; border-radius:20px;">關閉百寶箱</button>
+                <button onclick="history.back()" style="background:none; border:1px solid var(--text-on-light); color:var(--text-on-dark); padding:10px 20px; border-radius:20px;">關閉百寶箱</button>
             </div>
         </div>
         <div id="subpage-hotel" class="sub-page">
             <div class="sub-header"><button class="back-btn" onclick="closeSubPage('hotel')"><i class="fa-solid fa-arrow-left"></i></button><h2>酒店資訊</h2></div>
             <div class="sub-content">
-                <h3 style="color:var(--accent-color); font-family:'Shippori Mincho',serif; margin-bottom:10px;">[酒店名稱範例]</h3>
+                <h3 style="color:var(--accent-color); font-family:'Playfair Display',serif; margin-bottom:10px;">[酒店名稱範例]</h3>
                 <div style="font-size:0.9rem; opacity:0.8; margin-bottom:20px;">[酒店簡介範例]</div>
-               
+              
                 <div class="note-box">
                     <i class="fa-solid fa-location-dot" style="color:var(--accent-color)"></i> <b>地址：</b><br>
                     [地址範例]<br>
-                    <span style="font-size:0.8rem; color:#666;">(英文地址)</span><br>
+                    <span style="font-size:0.8rem; color:var(--text-on-light);"> (英文地址)</span><br>
                     <a href="https://www.google.com/maps/search/?api=1&query=34.9868,135.7599" target="_blank" class="link-btn" style="margin-top:8px;">開啟地圖</a>
                 </div>
                 <div class="checklist-item" style="opacity:1;">
                     <i class="fa-regular fa-clock" style="color:var(--accent-color)"></i>
                     <span><b>Check-in:</b> 15:00 起 / <b>Out:</b> 11:00 前</span>
                 </div>
-                <h4 style="border-bottom:1px solid #555; padding-bottom:5px; margin-top:25px;">特色</h4>
+                <h4 style="border-bottom:1px solid var(--menu-bg); padding-bottom:5px; margin-top:25px;">特色</h4>
                 <ul style="padding-left:20px; line-height:1.6; font-size:0.95rem;">
                     <li>[特色1範例]</li>
                     <li>[特色2範例]</li>
@@ -338,30 +358,30 @@
             <div class="sub-header"><button class="back-btn" onclick="closeSubPage('packing')"><i class="fa-solid fa-arrow-left"></i></button><h2>行李清單</h2></div>
             <div class="sub-content" id="packing-list-container"></div>
         </div>
-       
+      
         <div id="subpage-rate" class="sub-page">
             <div class="sub-header"><button class="back-btn" onclick="closeSubPage('rate')"><i class="fa-solid fa-arrow-left"></i></button><h2>匯率換算</h2></div>
             <div class="sub-content" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:80%;">
-                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; width:100%;">
+                <div style="background: rgba(82,192,167,0.05); padding: 20px; border-radius: 12px; width:100%;">
                     <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-                         <label style="font-size:0.8rem; color:#aaa;">匯率: <input type="number" id="rate-setting" value="0.052" step="0.001" style="width:60px; background:transparent; color:#fff; border:1px solid #555; text-align:center; border-radius:4px;"></label>
+                         <label style="font-size:0.8rem; color:var(--text-on-light);">匯率: <input type="number" id="rate-setting" value="0.052" step="0.001" style="width:60px; background:transparent; color:var(--text-on-dark); border:1px solid var(--menu-bg); text-align:center; border-radius:4px;"></label>
                     </div>
-                    <label>日幣 (JPY)</label><input type="number" id="jpy-input" placeholder="¥" oninput="calcRate('jpy')" style="width: 100%; padding: 15px; margin: 10px 0; font-size: 1.2rem; background: rgba(0,0,0,0.3); border: 1px solid #555; color: white; border-radius: 8px; text-align: center;">
+                    <label>日幣 (JPY)</label><input type="number" id="jpy-input" placeholder="¥" oninput="calcRate('jpy')" style="width: 100%; padding: 15px; margin: 10px 0; font-size: 1.2rem; background: rgba(219,198,174,0.3); border: 1px solid var(--menu-bg); color: var(--text-on-dark); border-radius: 8px; text-align: center;">
                     <div style="text-align:center; font-size:1.5rem; margin:10px 0; color:var(--accent-color);">⇅</div>
-                    <label>港幣 (HKD)</label><input type="number" id="hkd-input" placeholder="$" oninput="calcRate('hkd')" style="width: 100%; padding: 15px; margin: 10px 0; font-size: 1.2rem; background: rgba(0,0,0,0.3); border: 1px solid #555; color: white; border-radius: 8px; text-align: center;">
+                    <label>港幣 (HKD)</label><input type="number" id="hkd-input" placeholder="$" oninput="calcRate('hkd')" style="width: 100%; padding: 15px; margin: 10px 0; font-size: 1.2rem; background: rgba(219,198,174,0.3); border: 1px solid var(--menu-bg); color: var(--text-on-dark); border-radius: 8px; text-align: center;">
                 </div>
             </div>
         </div>
-       
+      
         <div id="subpage-safety" class="sub-page">
             <div class="sub-header"><button class="back-btn" onclick="closeSubPage('safety')"><i class="fa-solid fa-arrow-left"></i></button><h2>安全功能</h2></div>
             <div class="sub-content">
-                <div style="text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #2E4B71, #1a2e47); border-radius: 16px; margin-bottom: 20px;" onclick="sendSafetyMessage()">
+                <div style="text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #177263, #52c0a7); border-radius: 16px; margin-bottom: 20px;" onclick="sendSafetyMessage()">
                     <i class="fa-brands fa-whatsapp" style="font-size:3rem; color:white; margin-bottom:15px;"></i>
                     <h3 style="margin:0 0 10px 0;">一鍵報平安 (WhatsApp)</h3>
                     <p style="opacity:0.8; margin:0;">按此發送位置給家人</p>
                 </div>
-                <h3 style="border-bottom:1px solid #555; padding-bottom:10px; margin-top:30px;">緊急資訊</h3>
+                <h3 style="border-bottom:1px solid var(--menu-bg); padding-bottom:10px; margin-top:30px;">緊急資訊</h3>
                 <div class="checklist-item" onclick="alert('110')"><i class="fa-solid fa-shield-halved" style="color:var(--accent-color);"></i><span>警察局: 110</span></div>
                 <div class="checklist-item" onclick="alert('119')"><i class="fa-solid fa-truck-medical" style="color:var(--accent-color);"></i><span>救護/消防: 119</span></div>
             </div>
@@ -378,25 +398,25 @@
             <span class="close-modal" onclick="closeModal()">×</span>
             <div class="modal-header"><h2 id="modal-title">標題</h2><span id="modal-type" class="sub">類型</span></div>
             <div class="modal-body">
-               
+              
                 <div id="taxi-card" class="taxi-card" style="display:none;">
-                    <p style="font-size:0.8rem; color:#666; margin:0 0 5px 0;">運転手さん、ここへお願いします</p>
+                    <p style="font-size:0.8rem; color:var(--text-on-light); margin:0 0 5px 0;">運転手さん、ここへお願いします</p>
                     <h2 id="taxi-address" style="font-size:1.5rem; margin:5px 0; font-weight:bold; line-height:1.2;"></h2>
-                    <p id="taxi-name" style="font-size:1rem; margin-top:5px; color:#444;"></p>
+                    <p id="taxi-name" style="font-size:1rem; margin-top:5px; color:var(--text-on-dark);"></p>
                 </div>
                 <div class="info-row"><i class="fa-regular fa-clock"></i><span id="modal-time">時間</span></div>
                 <div class="info-row"><i class="fa-solid fa-location-dot"></i><span id="modal-address">地址</span></div>
                 <div class="info-row" id="modal-price-row"><i class="fa-solid fa-money-bill-wave"></i><span id="modal-price"></span></div>
-               
+              
                 <div class="note-box">
                     <div style="font-weight:bold; margin-bottom:8px; color:var(--accent-color);">攻略與 TIPS：</div>
                     <span id="modal-note">內容...</span>
                 </div>
                 <div id="modal-links" style="margin-bottom: 20px;"></div>
-               
+              
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:20px;">
                      <button class="action-btn" id="modal-map-btn" style="margin-top:0;"><i class="fa-solid fa-map-location-dot"></i> Google 導航</button>
-                     <button class="action-btn" onclick="toggleTaxiCard()" style="margin-top:0; background:#444;"><i class="fa-solid fa-taxi"></i> 給司機看</button>
+                     <button class="action-btn" onclick="toggleTaxiCard()" style="margin-top:0; background:var(--text-on-light);"><i class="fa-solid fa-taxi"></i> 給司機看</button>
                 </div>
             </div>
         </div>
@@ -470,7 +490,7 @@
         function switchMainPage(pageId, navEl) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + pageId).classList.add('active');
-           
+          
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(navEl) {
                 navEl.classList.add('active');
@@ -505,7 +525,7 @@
             currentDay = dayKey;
             document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active'));
             chipEl.classList.add('active');
-           
+          
             renderTimeline(dayKey);
             renderWeather(dayKey);
             renderDailyShopping(dayKey);
@@ -514,7 +534,7 @@
         function renderTimeline(dayKey) {
             const container = document.getElementById('timeline-container'); container.innerHTML = '';
             const dayTitle = document.createElement('h3'); dayTitle.style.marginBottom='20px';
-            dayTitle.innerHTML = `<span style="color:var(--accent-color); font-family:'Shippori Mincho',serif;">${scheduleData[dayKey].date}</span>`;
+            dayTitle.innerHTML = `<span style="color:var(--accent-color); font-family:'Playfair Display',serif;">${scheduleData[dayKey].date}</span>`;
             container.appendChild(dayTitle);
             scheduleData[dayKey].events.forEach(event => {
                 const item = document.createElement('div'); item.className = 'timeline-item';
@@ -524,7 +544,7 @@
                     if(t.includes('管制')) c+=' alert';
                     return `<span class="${c}">${t}</span>`;
                 }).join('');
-               
+              
                 let priceHtml = event.price ? `<div class="card-price">${event.price}</div>` : '';
                 item.innerHTML = `<div class="card" onclick='openEventModal(${JSON.stringify(event)})'>
                     <span class="card-time">${event.time}</span>
@@ -543,17 +563,17 @@
                 const data = await response.json();
                 const current = data.current;
                 const daily = data.daily;
-                
+               
                 let icon = "fa-cloud-sun";
                 let desc = "多雲";
                 if (current.weather_code === 0) { icon = "fa-sun"; desc = "晴朗"; }
                 else if (current.weather_code >= 1 && current.weather_code <= 3) { icon = "fa-cloud"; desc = "多雲"; }
                 else if (current.weather_code >= 51) { icon = "fa-cloud-rain"; desc = "有雨"; }
-                
+               
                 const temp = Math.round(current.temperature_2m);
                 const humidity = current.relative_humidity_2m;
                 const rainChance = daily.precipitation_probability_max[0];
-                
+               
                 container.innerHTML = `
                     <div class="weather-card">
                         <div style="font-size:0.9rem; opacity:0.9;">${scheduleData[dayKey].date} • 京都</div>
@@ -574,7 +594,7 @@
                 container.innerHTML = '<p>無法載入天氣數據，請檢查網路。</p>';
             }
         }
-       
+      
         function addWater() {
             waterCount++;
             document.getElementById('water-count').innerText = waterCount;
@@ -582,7 +602,7 @@
         function renderDailyShopping(dayKey) {
             const container = document.getElementById('daily-shopping-list');
             container.innerHTML = '';
-           
+          
             const events = scheduleData[dayKey].events;
             let hasItems = false;
             events.forEach(event => {
@@ -590,7 +610,7 @@
                     hasItems = true;
                     const group = document.createElement('div');
                     group.className = 'shopping-group';
-                   
+                  
                     let itemsHtml = '';
                     event.shopping_items.forEach((item, i) => {
                         const id = `shop-${dayKey}-${event.title}-${i}`;
@@ -636,7 +656,7 @@
             const rate = parseFloat(document.getElementById('rate-setting').value) || 0.052;
             const jpy = document.getElementById('jpy-input');
             const hkd = document.getElementById('hkd-input');
-           
+          
             if(type==='jpy') {
                 if(jpy.value === '') hkd.value = '';
                 else hkd.value = (jpy.value * rate).toFixed(1);
@@ -659,7 +679,7 @@
             document.getElementById('modal-time').innerText = event.time;
             document.getElementById('modal-address').innerText = event.address;
             document.getElementById('modal-note').innerHTML = event.note;
-           
+          
             document.getElementById('taxi-address').innerText = event.address;
             document.getElementById('taxi-name').innerText = event.title;
             document.getElementById('taxi-card').style.display = 'none';
@@ -672,7 +692,7 @@
             }
             const lc = document.getElementById('modal-links'); lc.innerHTML = '';
             if(event.link) lc.innerHTML = `<a href="${event.link}" target="_blank" class="link-btn"><i class="fa-solid fa-link"></i> 預約/詳情</a>`;
-           
+          
             let mapUrl = "";
             if(event.coords) {
                 mapUrl = `https://www.google.com/maps/search/?api=1&query=${event.coords[0]},${event.coords[1]}`;
@@ -683,7 +703,7 @@
             document.getElementById('modal-map-btn').onclick = () => window.open(mapUrl, '_blank');
             document.getElementById('detail-modal').classList.add('open');
         }
-       
+      
         function toggleTaxiCard() {
             const card = document.getElementById('taxi-card');
             card.style.display = card.style.display === 'none' ? 'block' : 'none';
@@ -701,7 +721,7 @@
             if(!map) return;
             markers.forEach(m => map.removeLayer(m));
             markers = [];
-           
+          
             const events = scheduleData[dayKey].events;
             const group = new L.featureGroup();
             events.forEach(event => {
@@ -726,7 +746,7 @@
                 map.setView([35.0000, 135.7600], 13);
             }
         }
-       
+      
         function fitMapToDay() {
             if(map && markers.length > 0) {
                 const group = new L.featureGroup(markers);
