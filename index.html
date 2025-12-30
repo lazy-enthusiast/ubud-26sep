@@ -27,7 +27,7 @@
             margin: 0; padding: 0;
             height: 100vh;
             display: flex; flex-direction: column; overflow: hidden;
-            overscroll-behavior-y: none; /* iOS 優化：防止拉動刷新 */
+            overscroll-behavior-y: none; /* iOS 優化 */
         }
         /* --- Header --- */
         header {
@@ -45,30 +45,63 @@
         .header-icons { display: flex; gap: 20px; align-items: center; }
         .header-btn { color: var(--text-on-dark); font-size: 1.2rem; cursor: pointer; text-decoration: none; position: relative;}
         .fan-btn i { color: var(--accent-color); }
-        /* --- Global Date Selector --- */
+
+        /* --- Global Date Selector (Improved UI) --- */
         .date-selector-container {
-            background: var(--bg-color); z-index: 90;
-            padding: 10px 20px 10px 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: var(--bg-color); 
+            z-index: 90;
+            padding: 12px 0; /* 上下留白 */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* 更柔和的陰影 */
+            display: flex;
+            justify-content: center; /* 關鍵：讓內部的日期列在寬螢幕時居中 */
         }
         .date-selector {
-            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; scrollbar-width: none;
+            display: flex;
+            gap: 12px; /* 增加間距 */
+            padding: 0 20px; /* 左右內縮 */
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox 隱藏滾動條 */
+            
+            /* 關鍵邏輯：自適應寬度 */
+            width: max-content; /* 內容少時，寬度縮減配合父層居中 */
+            max-width: 100%; /* 內容多時，限制寬度 */
+            
             -webkit-overflow-scrolling: touch;
         }
-        .date-selector::-webkit-scrollbar { display: none; }
+        .date-selector::-webkit-scrollbar { display: none; } /* Chrome/Safari 隱藏滾動條 */
        
         .date-chip {
-            background: rgba(82, 192, 167, 0.2);
-            padding: 8px 12px; border-radius: 20px;
-            white-space: nowrap; font-size: 0.85rem; cursor: pointer; color: var(--text-on-dark);
-            display: flex; flex-direction: column; align-items: center; min-width: 55px;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.6); /* 半透明白底 */
+            border: 1px solid rgba(82, 192, 167, 0.3); /* 極細的綠框 */
+            padding: 8px 16px; 
+            border-radius: 25px; /* 更圓潤 */
+            white-space: nowrap; 
+            font-size: 0.85rem; 
+            cursor: pointer; 
+            color: var(--text-on-dark);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-width: 60px;
+            flex-shrink: 0; /* 防止被壓縮 */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* 絲滑動畫 */
         }
+        
+        .date-chip:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
         .date-chip.active {
-            background: var(--accent-color); color: #fff;
-            box-shadow: 0 0 10px rgba(212, 70, 1, 0.3); transform: scale(1.05);
+            background: var(--text-on-dark); /* 深紅選中態 */
+            color: #f2e8d5; /* 米色文字 */
+            border-color: var(--text-on-dark);
+            box-shadow: 0 4px 12px rgba(92, 13, 9, 0.3);
+            transform: scale(1.05);
         }
+        .date-chip span.day-num { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px;}
+        .date-chip span.day-week { font-size: 0.7rem; opacity: 0.8; }
+
         /* --- Main Content --- */
         main { flex: 1; overflow-y: hidden; position: relative; }
         .page {
@@ -546,12 +579,33 @@
         function init() {
             loadCustomData();
             renderDateSelector();
-            selectDay('day1', document.querySelector('.date-chip'));
+            
+            // Auto Select Day Logic
+            const todayKey = getAutoSelectedDay();
+            const targetChip = document.querySelector(`.date-chip[data-day="${todayKey}"]`) || document.querySelector('.date-chip');
+            selectDay(todayKey, targetChip);
+            
             renderPackingList();
             renderGeneralShoppingList();
             initMap();
             fetchExchangeRate();
         }
+        
+        function getAutoSelectedDay() {
+            const now = new Date();
+            const m = now.getMonth() + 1;
+            const d = now.getDate();
+            const todayStr = `${m}/${d}`; // e.g. "9/25"
+            
+            for (let key in scheduleData) {
+                // scheduleData[key].date format is "9/25 (五)"
+                if (scheduleData[key].date.split(' ')[0] === todayStr) {
+                    return key;
+                }
+            }
+            return 'day1'; // Default to day1 if no match
+        }
+
         function loadCustomData() {
             const saved = localStorage.getItem('scheduleData');
             if (saved) {
@@ -593,7 +647,8 @@
                 const dayInfo = scheduleData[dayKey];
                 const dayNum = dayKey.replace('day', '');
                 const chip = document.createElement('div');
-                chip.className = `date-chip ${dayKey === 'day1' ? 'active' : ''}`;
+                chip.className = `date-chip`;
+                chip.dataset.day = dayKey; 
                 chip.onclick = () => selectDay(dayKey, chip);
                 chip.innerHTML = `<span class="day-num">D${dayNum}</span><span class="day-week">${dayInfo.date.split(' ')[0]}</span>`;
                 container.appendChild(chip);
@@ -602,7 +657,7 @@
         function selectDay(dayKey, chipEl) {
             currentDay = dayKey;
             document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active'));
-            chipEl.classList.add('active');
+            if(chipEl) chipEl.classList.add('active');
            
             renderTimeline(dayKey);
             renderWeather(dayKey);
