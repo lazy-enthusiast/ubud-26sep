@@ -3,529 +3,979 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>烏布香氛慢活之旅</title>
+<meta name="theme-color" content="#F9F9F9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Loading...</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <style>
-/* ⛔ [系統核心樣式 v31.6] */
+/* ========================================================
+🎨 [系統樣式表] 
+========================================================
+*/
 :root {
-    --bg-body: #f2e8d5; --bg-card: #fdfaf3; 
-    --text-main: #5c0d09; --text-sub: #177263; 
-    --accent: #d44601; --accent-text: #FFFFFF; 
-    --border: rgba(82, 192, 167, 0.2); 
-    --font-heading: "Playfair Display", serif; --font-body: "Montserrat", sans-serif;
-    --shadow: 0 4px 15px rgba(0,0,0,0.05);
-    --safe-top: env(safe-area-inset-top);
-    --safe-bottom: env(safe-area-inset-bottom);
+--bg-body: #FFFFFF; --bg-card: #F9F9F9;
+--text-main: #111111; --text-sub: #777777;
+--accent: #000000; --accent-text: #FFFFFF;
+--border: #EEEEEE;
+--font-heading: sans-serif; --font-body: sans-serif;
+--shadow: 0 1px 3px rgba(0,0,0,0.05);
+--safe-top: env(safe-area-inset-top);
+--safe-bottom: env(safe-area-inset-bottom);
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-body { font-family: var(--font-body); background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 0; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; transition: all 0.3s ease; line-height: 1.5; }
+body { font-family: var(--font-body); background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 0; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; transition: all 0.3s ease; line-height: 1.4; }
 
 /* Header */
-header { background-color: var(--bg-body); opacity: 0.98; backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0 20px; padding-top: var(--safe-top); height: calc(64px + var(--safe-top)); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; position: relative; z-index: 200; }
-header h1 { margin: 0; font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; color: var(--accent); font-family: var(--font-heading); text-transform: capitalize; line-height: 1.2; }
-#local-clock { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; letter-spacing: 1px; margin-top: 4px; font-variant-numeric: tabular-nums; }
-
-.header-actions { display: flex; align-items: center; gap: 12px; }
-.header-btn { font-size: 1.1rem; cursor: pointer; color: var(--text-main); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background: transparent; transition: background 0.2s; }
+header { background-color: var(--bg-card); opacity: 0.98; backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0 15px; padding-top: var(--safe-top); height: calc(56px + var(--safe-top)); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; position: relative; z-index: 200; }
+header h1 { margin: 0; font-size: 1.1rem; font-weight: 800; letter-spacing: 0.5px; color: var(--text-main); font-family: var(--font-heading); text-transform: uppercase; line-height: 1; }
+#home-clock { font-size: 0.65rem; color: var(--text-sub); font-weight: 600; letter-spacing: 1px; margin-top: 3px; font-variant-numeric: tabular-nums; }
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.header-btn { font-size: 1rem; cursor: pointer; color: var(--text-main); border-radius: 50%; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; background: transparent; transition: background 0.2s; }
 
 /* Date Selector */
-.date-selector-container { background: var(--bg-body); opacity: 0.98; padding: 10px 0; border-bottom: 1px solid var(--border); width: 100%; flex-shrink: 0; position: relative; z-index: 90; box-shadow: var(--shadow); }
-.date-selector { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding: 0 20px; }
-.date-chip { flex: 0 0 auto; min-width: 60px; padding: 8px 12px; border-radius: 20px; cursor: pointer; color: var(--text-sub); display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
-.date-chip.active { background: var(--text-main); color: var(--bg-body); border-color: var(--text-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-.day-num { font-weight: 700; font-size: 1rem; line-height: 1; margin-bottom: 3px; font-family: var(--font-heading); } 
-.day-week { font-size: 0.65rem; font-weight: 500; opacity: 0.9; letter-spacing: 0.5px; text-transform: uppercase;}
+.date-selector-container { background: var(--bg-card); opacity: 0.98; padding: 5px 0; border-bottom: 1px solid var(--border); width: 100%; flex-shrink: 0; position: relative; z-index: 90; }
+.date-selector { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; padding: 0 10px; }
+.date-chip { flex: 1 0 auto; min-width: 55px; max-width: 100px; padding: 8px 0; border-radius: 0; cursor: pointer; color: var(--text-sub); display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; border: 1px solid transparent; transition: all 0.2s; }
+.date-chip.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+.day-num { font-weight: 700; font-size: 1rem; line-height: 1; margin-bottom: 2px; font-family: var(--font-heading); }
+.day-week { font-size: 0.6rem; font-weight: 500; opacity: 0.8; letter-spacing: 0.5px; text-transform: uppercase;}
 
 /* Main Structure */
 main { flex: 1; overflow-y: hidden; position: relative; }
-.page { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; padding: 20px 0 100px 0; display: none; opacity: 0; transition: opacity 0.3s ease; background-color: var(--bg-body); -webkit-overflow-scrolling: touch; }
+.page { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; padding: 10px 0 80px 0; display: none; opacity: 0; transition: opacity 0.2s ease; background-color: var(--bg-body); -webkit-overflow-scrolling: touch; }
 .page.active { display: block; opacity: 1; z-index: 10; }
-.page-header { padding: 0 20px; margin-bottom: 20px; }
-.page-title { font-size: 1.8rem; font-weight: 700; margin: 0; letter-spacing: -0.5px; font-family: var(--font-heading); color: var(--accent); }
+.page-header { padding: 0 15px; margin-bottom: 15px; }
+.page-title { font-size: 1.5rem; font-weight: 800; margin: 0; letter-spacing: -0.5px; font-family: var(--font-heading); }
 
 /* Timeline */
-.timeline-container { padding: 5px 20px; max-width: 800px; margin: 0 auto; }
-.timeline-item { position: relative; padding-left: 30px; padding-bottom: 25px; border-left: 2px solid rgba(0,0,0,0.05); }
-.timeline-item:last-child { border-left: 2px solid transparent; }
-.timeline-item::before { content: ''; position: absolute; left: -6px; top: 20px; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; z-index: 2; border: 2px solid var(--bg-body); box-shadow: 0 0 0 2px var(--accent); }
-.card { background-color: var(--bg-card); border-radius: 16px; padding: 20px; padding-right: 50px; box-shadow: var(--shadow); cursor: pointer; position: relative; transition: transform 0.2s; border: 1px solid var(--border); min-height: auto; display: flex; flex-direction: column; justify-content: center; border-left: none; }
-.card:active { transform: scale(0.98); opacity: 0.9; }
+.timeline-container { padding: 5px 15px; max-width: 800px; margin: 0 auto; }
+.timeline-item { position: relative; padding-left: 25px; padding-bottom: 12px; border-left: 1px solid var(--border); }
+.timeline-item:last-child { border-left: 1px solid transparent; }
+.timeline-item::before { content: ''; position: absolute; left: -3px; top: 18px; width: 5px; height: 5px; background: var(--text-main); border-radius: 50%; z-index: 2; }
+.card { background-color: var(--bg-card); border-radius: 0; padding: 15px; padding-right: 50px; box-shadow: var(--shadow); cursor: pointer; position: relative; transition: transform 0.1s; border: 1px solid var(--border); min-height: auto; display: flex; flex-direction: column; justify-content: center; border-left-width: 4px; }
+.card:active { transform: scale(0.99); opacity: 0.9; }
+.card-nav-btn { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: var(--bg-body); color: var(--text-main); display: flex; justify-content: center; align-items: center; font-size: 0.9rem; border: 1px solid var(--border); }
+.card-title { font-size: 1rem; font-weight: 700; margin: 0 0 5px 0; line-height: 1.3; font-family: var(--font-heading); color: var(--text-main); letter-spacing: 0.2px; }
+.card-time { font-size: 0.7rem; color: var(--text-sub); font-weight: 600; margin-bottom: 4px; display: block; font-family: var(--font-body); letter-spacing: 0.5px; text-transform: uppercase;}
+.card-tag { font-size: 0.6rem; background: var(--bg-body); padding: 2px 6px; border-radius: 0; color: var(--text-sub); font-weight: 500; border: 1px solid var(--border); letter-spacing: 0.5px; }
 
-/* ✨ Fixed: Nav Button Vertically Centered */
-.card-nav-btn { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.03); color: var(--text-main); display: flex; justify-content: center; align-items: center; font-size: 1rem; border: none; }
+/* Weather */
+.weather-main-card { background: var(--text-main); color: var(--bg-body); border-radius: 0; padding: 20px; margin: 0 15px 20px 15px; text-align: center; position: relative; overflow: hidden;}
+.weather-tag-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); padding: 2px 8px; font-size: 0.6rem; border-radius: 10px; font-weight: 600; }
+.weather-header-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
+.weather-big-temp { font-size: 3.5rem; font-weight: 300; line-height: 1; letter-spacing: -2px; font-family: var(--font-heading); }
+.weather-condition { font-size: 0.9rem; font-weight: 600; opacity: 0.9; margin-bottom: 2px; letter-spacing: 1px; text-transform: uppercase;}
+.weather-hl { font-size: 0.75rem; opacity: 0.7; font-family: var(--font-body); }
+.weather-main-icon { font-size: 2.5rem; color: inherit; opacity: 0.9; }
+.section-label { padding: 0 15px; font-size: 0.65rem; font-weight: 700; color: var(--text-main); margin-bottom: 10px; display: block; text-transform: uppercase; letter-spacing: 1.5px; }
+.hourly-container { display: flex; gap: 8px; overflow-x: auto; padding: 0 15px 15px 15px; scrollbar-width: none; }
+.hourly-item { flex: 0 0 auto; width: 60px; background: var(--bg-card); border-radius: 0; padding: 10px 5px; text-align: center; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: space-between; height: 90px; }
+.hourly-time { font-size: 0.65rem; color: var(--text-sub); font-weight: 600; margin-bottom: 5px; }
+.hourly-icon { font-size: 1rem; margin: 5px 0; color: var(--text-main); }
+.hourly-temp { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+.hourly-rain { font-size: 0.55rem; color: var(--text-sub); font-weight: 500; margin-top: 5px; }
+.advice-card { background: var(--bg-card); margin: 0 15px 25px 15px; padding: 15px; border-radius: 0; border: 1px solid var(--border); display: flex; gap: 15px; align-items: flex-start; }
+.advice-icon { width: 32px; height: 32px; background: var(--bg-body); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem; color: var(--text-main); border: 1px solid var(--border); }
+.advice-content h4 { margin: 0 0 5px 0; font-size: 0.85rem; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.advice-content p { margin: 0; font-size: 0.85rem; color: var(--text-sub); line-height: 1.5; }
+.weather-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 15px 30px 15px; }
+.weather-stat-card { background: var(--bg-card); padding: 15px; border-radius: 0; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; height: 80px; }
+.ws-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.ws-label { font-size: 0.6rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+.ws-icon { color: var(--text-sub); font-size: 0.8rem; }
+.ws-value { font-size: 1.1rem; font-weight: 400; color: var(--text-main); font-family: var(--font-heading); }
+.ws-sub { font-size: 0.65rem; color: var(--text-sub); margin-top: 2px; }
 
-.card-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 8px 0; line-height: 1.3; font-family: var(--font-heading); color: var(--text-main); letter-spacing: 0.2px; }
-.card-time { font-size: 0.8rem; color: var(--accent); font-weight: 700; margin-bottom: 6px; display: block; font-family: var(--font-body); letter-spacing: 0.5px; text-transform: uppercase;}
-.card-tag { font-size: 0.65rem; background: rgba(0,0,0,0.05); padding: 4px 10px; border-radius: 12px; color: var(--text-sub); font-weight: 600; border: none; letter-spacing: 0.5px; display: inline-block; margin-right: 5px; }
-.card-tag.highlight { background: var(--accent); color: var(--accent-text); }
-.card-tag.alert { border: 1px solid var(--accent); color: var(--accent); background: transparent; }
+/* Shopping */
+.shopping-list { padding: 0 15px; }
+.shop-item { background: var(--bg-card); padding: 15px; border-radius: 0; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); }
+.shop-item.checked { opacity: 0.4; background: var(--bg-body); }
+.shop-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); border-radius: 0; }
+.shop-item label { flex: 1; font-size: 0.95rem; color: var(--text-main); font-family: var(--font-body); }
 
-/* Inspiration (Backup Plan) Cards */
-.filter-bar-container { padding: 0 20px 15px 20px; position: sticky; top: 0; z-index: 50; background: var(--bg-body); overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-.filter-chip { display: inline-block; padding: 8px 18px; margin-right: 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-sub); cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.filter-chip.active { background: var(--text-main); color: var(--bg-body); border-color: var(--text-main); }
-.inspire-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 25px; padding-right: 50px; color: var(--text-main); position: relative; display: flex; flex-direction: column; justify-content: center; margin-bottom: 15px; cursor: pointer; min-height: 100px; box-shadow: var(--shadow); transition: transform 0.2s; }
-.inspire-card:active { transform: scale(0.98); opacity: 0.9; }
+/* Inspiration */
+.filter-bar-container { padding: 0 15px 15px 15px; position: sticky; top: 0; z-index: 50; background: var(--bg-body); overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
+.filter-chip { display: inline-block; padding: 8px 16px; margin-right: 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 0; font-size: 0.75rem; color: var(--text-sub); cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+.filter-chip.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+.inspire-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 0; padding: 20px; color: var(--text-main); position: relative; display: flex; flex-direction: column; justify-content: center; margin-bottom: 15px; cursor: pointer; min-height: 80px; box-shadow: var(--shadow); }
+.inspire-card:active { transform: scale(0.99); opacity: 0.9; }
 .inspire-card.hidden { display: none; }
-.inspire-badge { background: var(--accent); color: var(--accent-text); padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; position: absolute; top: -10px; left: 20px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-.inspire-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 6px 0; font-family: var(--font-heading); color: var(--text-main); }
-.inspire-note { font-size: 0.9rem; color: var(--text-sub); line-height: 1.6; }
-.inspire-nav-btn { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.03); color: var(--text-main); display: flex; justify-content: center; align-items: center; font-size: 0.9rem; }
+.inspire-badge { background: var(--accent); color: var(--accent-text); padding: 3px 8px; border-radius: 0; font-size: 0.6rem; font-weight: 700; position: absolute; top: -10px; left: 15px; text-transform: uppercase; letter-spacing: 1px; }
+.inspire-title { font-size: 1rem; font-weight: 700; margin: 0 0 4px 0; font-family: var(--font-heading); }
+.inspire-note { font-size: 0.85rem; color: var(--text-sub); line-height: 1.4; }
 
-/* Modal */
-.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: end; backdrop-filter: blur(5px); cursor: pointer; } 
+/* Info Page */
+.info-card { background: var(--bg-card); padding: 20px; border-radius: 0; margin: 0 15px 15px 15px; border: 1px solid var(--border); }
+.info-header { font-weight: bold; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
+.info-row { display: flex; gap: 15px; margin-bottom: 15px; align-items: flex-start; font-size: 0.9rem; color: var(--text-main); line-height: 1.5; }
+.info-icon { width: 18px; text-align: center; color: var(--text-sub); padding-top: 2px; flex-shrink: 0; font-size: 0.9rem; }
+.contact-container { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; margin-top: 0; }
+.btn-icon-sm { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 0.85rem; cursor: pointer; transition: transform 0.1s; border: 1px solid var(--border); color: var(--text-main); background: var(--bg-body); flex-shrink: 0; }
+.btn-copy-text { padding: 3px 8px; font-size: 0.7rem; border: 1px solid var(--border); background: var(--bg-body); color: var(--text-main); cursor: pointer; border-radius: 4px; white-space: nowrap; margin-left: 5px; }
+.flight-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.flight-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border); padding-bottom: 12px; margin-bottom: 12px; }
+.flight-code { font-size: 1.1rem; font-weight: 800; font-family: var(--font-heading); color: var(--text-main); display: flex; align-items: center; gap: 6px;}
+.flight-time { font-size: 0.85rem; font-weight: 600; margin-top: 2px; color: var(--text-main); }
+.flight-meta { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+
+/* Phrases Grid */
+.phrase-section-header { padding: 15px 15px 5px 15px; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
+.phrase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 15px 30px 15px; }
+.phrase-card { background: var(--bg-card); border: 1px solid var(--border); padding: 20px 10px; border-radius: 0; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow); aspect-ratio: 1.4; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+.phrase-card:active { transform: scale(0.97); opacity: 0.9; }
+.phrase-primary { font-weight: 700; font-size: 1.1rem; margin-bottom: 6px; color: var(--text-main); font-family: var(--font-heading); }
+.phrase-secondary { font-size: 0.8rem; color: var(--text-sub); }
+.phrase-pronounce { font-size: 0.6rem; color: var(--text-sub); opacity: 0.6; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Modal & Overlay */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: end; backdrop-filter: blur(5px); cursor: pointer; }
 .modal.open { display: flex; }
-.modal-content { background: var(--bg-card); color: var(--text-main); width: 100%; max-width: 600px; max-height: 90vh; border-radius: 25px 25px 0 0; padding: 0 0 40px 0; overflow-y: auto; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); cursor: default; display: flex; flex-direction: column; border-top: 1px solid var(--border); box-shadow: 0 -10px 40px rgba(0,0,0,0.1); transition: transform 0.2s ease-out; }
-.modal-handle-container { width: 100%; height: 35px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; touch-action: none; cursor: grab; background: var(--bg-card); border-radius: 25px 25px 0 0; border-bottom: 1px solid transparent; }
-.modal-handle { width: 50px; height: 5px; background: #DDDDDD; border-radius: 10px; }
-.modal-body { padding: 0 30px 30px 30px; }
-.modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 25px 0; }
-.modal-label { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 8px; font-weight: 700; }
-.modal-value { font-size: 1rem; font-weight: 500; color: var(--text-main); font-family: var(--font-body); }
-.modal-note-box { background: rgba(242, 232, 213, 0.4); padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid var(--accent); font-size: 0.95rem; line-height: 1.8; color: var(--text-main); white-space: pre-line; }
-.btn-action { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-size: 0.9rem; text-align: center; margin-bottom:12px; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; gap: 10px; transition: all 0.2s; }
-.btn-black { background: var(--text-main); color: var(--bg-body); }
-.btn-outline { background: transparent; border: 1px solid var(--text-main); color: var(--text-main); }
+.modal-content { background: var(--bg-card); color: var(--text-main); width: 100%; max-width: 600px; max-height: 90vh; border-radius: 0; padding: 0 0 30px 0; overflow-y: auto; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); cursor: default; display: flex; flex-direction: column; border-top: 1px solid var(--border); box-shadow: 0 -10px 40px rgba(0,0,0,0.05); transition: transform 0.2s ease-out; }
+.modal-handle-container { width: 100%; height: 25px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; touch-action: none; cursor: grab; }
+.modal-handle { width: 36px; height: 4px; background: #DDDDDD; border-radius: 10px; }
+.modal-body { padding: 0 25px 25px 25px; }
+.modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+.modal-label { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 6px; font-weight: 700; }
+.modal-value { font-size: 0.95rem; font-weight: 400; color: var(--text-main); font-family: var(--font-body); }
+.modal-note-box { background: var(--bg-body); padding: 20px; border-radius: 0; margin: 15px 0; border: 1px solid var(--border); font-size: 0.9rem; line-height: 1.7; color: var(--text-main); white-space: pre-line; }
+.btn-action { width: 100%; padding: 16px; border-radius: 0; border: none; font-weight: 600; cursor: pointer; font-size: 0.85rem; text-align: center; margin-bottom:10px; text-transform: uppercase; letter-spacing: 1px; }
+.btn-black { background: var(--accent); color: var(--accent-text); }
+.btn-outline { background: var(--bg-card); border: 1px solid var(--text-main); color: var(--text-main); }
 
-/* Nav */
-nav.bottom-nav { position: fixed; bottom: 0; width: 100%; background-color: var(--bg-body); opacity: 0.98; display: flex; justify-content: space-around; padding: 12px 0 calc(15px + var(--safe-bottom)) 0; border-top: 1px solid var(--border); z-index: 100; backdrop-filter: blur(10px); }
-.nav-item { color: var(--text-sub); text-align: center; font-size: 0.65rem; cursor: pointer; width: 25%; transition: all 0.2s; opacity: 0.6; }
-.nav-item.active { color: var(--accent); opacity: 1; font-weight: 700; transform: translateY(-2px); }
-.nav-item i { display: block; font-size: 1.3rem; margin-bottom: 5px; }
+/* Nav & Sidebar */
+nav.bottom-nav { position: fixed; bottom: 0; width: 100%; background-color: var(--bg-card); opacity: 0.98; display: flex; justify-content: space-around; padding: 12px 0 calc(12px + var(--safe-bottom)) 0; border-top: 1px solid var(--border); z-index: 100; backdrop-filter: blur(10px); }
+.nav-item { color: var(--text-sub); text-align: center; font-size: 0.6rem; cursor: pointer; width: 25%; transition: color 0.2s; opacity: 0.5; }
+.nav-item.active { color: var(--accent); opacity: 1; font-weight: 600; }
+.nav-item i { display: block; font-size: 1.2rem; margin-bottom: 4px; }
+#toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-card); padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-weight: 500; } #toast.show { opacity: 1; }
+.sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); } .sidebar-overlay.open { opacity: 1; pointer-events: all; }
+.sidebar { position: fixed; top: 0; right: 0; width: 85%; max-width: 300px; height: 100%; background: var(--bg-card); color: var(--text-main); z-index: 1001; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; padding: 25px 20px 100px 20px; padding-top: calc(25px + var(--safe-top)); box-shadow: -5px 0 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; border-left: 1px solid var(--border); } .sidebar.open { transform: translateX(0); } .sidebar-section-title { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 30px; font-weight: 600; }
+.whatsapp-box { background: var(--bg-body); border: 1px solid var(--border); color: var(--text-main); padding: 15px; border-radius: 0; margin-top: 20px; } .wa-input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid var(--border); border-radius: 0; font-size: 0.95rem; background: var(--bg-card); } .wa-btn { width: 100%; background: var(--accent); color: var(--accent-text); border: none; padding: 10px; border-radius: 0; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem; }
+.tool-box { background: var(--bg-card); padding: 15px; border-radius: 0; border: 1px solid var(--border); margin-bottom: 10px; box-shadow: var(--shadow); } .currency-grid { display: grid; grid-template-columns: 1fr 30px 1fr; align-items: center; gap: 5px; margin-bottom: 8px; } .curr-group { display: flex; flex-direction: column; } .curr-label { font-size: 0.65rem; color: var(--text-sub); font-weight: bold; margin-bottom: 4px; padding-left: 2px;} .curr-input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 0; font-size: 1.1rem; text-align: center; background: var(--bg-body); font-weight: 600; color: var(--text-main); } .rate-info-container { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.7rem; color: var(--text-sub);} .memo-area { width: 100%; height: 100px; padding: 10px; border: 1px solid var(--border); border-radius: 0; font-family: inherit; font-size: 0.9rem; resize: none; background: var(--bg-body); line-height: 1.5; color: var(--text-main); }
+.sidebar-menu-btn { width: 100%; padding: 15px; background: var(--bg-body); border: 1px solid var(--border); color: var(--text-main); font-weight: 600; text-align: left; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px; box-shadow: var(--shadow); }
 
-/* Shopping & Weather Styles (Minimal) */
-.shopping-list { padding: 0 20px; }
-.shop-item { background: var(--bg-card); padding: 18px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--border); transition: all 0.2s; }
-.shop-item.checked { opacity: 0.5; background: var(--bg-body); }
-.shop-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent); border-radius: 4px; }
-.shop-item label { flex: 1; font-size: 1rem; color: var(--text-main); font-weight: 500; }
-.weather-main-card { background: linear-gradient(135deg, #a0d0b0 0%, #177263 100%); color: #fff; border-radius: 20px; padding: 25px; margin: 0 20px 25px 20px; text-align: center; box-shadow: 0 10px 30px rgba(23, 114, 99, 0.2); }
-.weather-big-temp { font-size: 4rem; font-weight: 300; margin: 15px 0; font-family: var(--font-heading); }
-.weather-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 20px 30px 20px; }
-.weather-stat-card { background: var(--bg-card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; height: 90px; }
-.ws-value { font-size: 1.2rem; font-weight: 400; color: var(--text-main); font-family: var(--font-heading); }
-
-/* Utility */
-#toast { position: fixed; top: 90px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-body); padding: 12px 25px; border-radius: 30px; font-size: 0.9rem; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s; font-weight: 600; } #toast.show { opacity: 1; }
-.sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(3px); } .sidebar-overlay.open { opacity: 1; pointer-events: all; }
-.sidebar { position: fixed; top: 0; right: 0; width: 85%; max-width: 320px; height: 100%; background: var(--bg-card); color: var(--text-main); z-index: 1001; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; padding: 25px 25px 100px 25px; border-left: 1px solid var(--border); } .sidebar.open { transform: translateX(0); }
-.tool-box { background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 15px; } .curr-input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1.2rem; text-align: center; background: var(--bg-body); font-weight: 600; color: var(--text-main); }
-/* ✨ Fixed: Hidden by default to prevent "關閉" ghost text */
-.phrase-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 5000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; } 
-.phrase-overlay.active { display: flex; opacity: 1; pointer-events: all; }
-.phrase-content { text-align: center; width: 85%; } .phrase-big { font-size: 2.2rem; font-weight: 700; color: var(--accent); line-height: 1.3; margin-bottom: 25px; word-break: break-word; font-family: var(--font-heading); } 
-.close-phrase { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); border: 1px solid var(--border); padding: 12px 40px; border-radius: 30px; color: var(--text-main); cursor: pointer; background: var(--bg-card); font-weight: 600; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-
+/* Phrase Overlay */
+.phrase-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 5000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; } .phrase-overlay.active { opacity: 1; pointer-events: all; } .phrase-content { text-align: center; width: 90%; } .phrase-big { font-size: 3rem; font-weight: 800; color: #000; line-height: 1.2; margin-bottom: 20px; word-break: break-all; font-family: var(--font-heading); } .close-phrase { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); border: 1px solid #E5E5EA; padding: 10px 30px; border-radius: 30px; color: var(--text-main); cursor: pointer; background: var(--bg-card); font-weight: 600; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 </style>
 </head>
 <body>
 
-<script>
-// ============================================
-//   ⚙️ 1. [THEME CONFIG]
-// ============================================
+<script id="USER_DATA_CONFIG">
+// 1. 🎨 主題顏色 (Ubud Slow Living Theme)
 const THEME_CONFIG = {
-    accentColor: "#d44601",       
-    accentText: "#FFFFFF",        
-    backgroundColor: "#f2e8d5",   
-    cardColor: "#fdfaf3",         
-    textColor: "#5c0d09",         
-    textSubColor: "#177263",      
-    borderColor: "rgba(82, 192, 167, 0.2)",       
-    googleFontsUrl: "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap",
-    fontHeading: '"Playfair Display", serif', 
+    accentColor: "#d44601",      // 溫暖橙 (重點按鈕/交通)
+    accentText: "#FFFFFF",       // 橙色背景上的白字
+    backgroundColor: "#f2e8d5",  // 米色/奶油砂 (背景)
+    cardColor: "#fdfaf3",        // 象牙白 (卡片/內容區)
+    textColor: "#5c0d09",        // 深紅/深棕 (主要文字)
+    textSubColor: "#177263",     // 熱帶綠 (次要資訊/標籤)
+    borderColor: "#e0d6c3",      // 邊框顏色
+    googleFontsUrl: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@700;800&display=swap",
+    fontHeading: '"Playfair Display", serif',
     fontBody: '"Montserrat", sans-serif'
 };
 
-// ============================================
-//   🗺️ 2. [DATA]
-// ============================================
-const CONFIG = { startDate: "2026-09-25", duration: 6 };
-const DESTINATION = { name: "Hong Kong", lat: -8.5069, lon: 115.2625, timezone: "Asia/Hong_Kong", currency: "idr", currencyLabel: "IDR", baseCurrency: "HKD", appTitle: "烏布香薰慢活之旅" };
-const TRIP_INFO = { visa: { type: "VoA", number: "Rp 500k", note: "建議事先申請 e-VOA" } };
+// 2. 🗓️ 旅程設定
+const CONFIG = {
+    ui: {
+        browserTitle: "Ubud Slow Living",
+        headerTitle: "UBUD <span>SLOW</span>",
+        homeTimezone: "Asia/Hong_Kong",
+        homeTimeLabel: "HKT"
+    },
+    startDate: "2026-09-25", // 週五出發
+    duration: 6
+};
 
+// 3. 📍 目的地
+const DESTINATION = {
+    name: "烏布 Ubud",
+    lat: -8.5069,
+    lon: 115.2625,
+    timezone: "Asia/Makassar",
+    currency: "idr",
+    currencyLabel: "IDR",
+    baseCurrency: "HKD"
+};
+
+// 4. ✈️ 航班與住宿
+const TRIP_INFO = {
+    visa: {
+        type: "印尼落地簽 (VoA)",
+        number: "需準備 Rp 500,000",
+        note: "建議事先申請 e-VOA 省排隊時間"
+    },
+    flights: [
+        {
+            type: "去程", flight: "CX785", date: "09/25",
+            dep: "HKG 10:00", arr: "DPS 15:00",
+            note: "T1 登機 / 峇里島入境卡已填", bookingRef: "CX-GO"
+        },
+        {
+            type: "回程", flight: "CX784", date: "09/30",
+            dep: "DPS 16:10", arr: "HKG 21:00",
+            note: "需提早 2.5 小時抵達機場", bookingRef: "CX-BACK"
+        }
+    ],
+    hotels: [
+        {
+            name: "Tegal Sari Accommodation",
+            address: "Jl. Hanoman, Padang Tegal, Ubud, Bali",
+            phone: "+62361973318"
+        }
+    ],
+    emergency: [
+        { name: "遊客警察", phone: "+62-361-759-687" },
+        { name: "救護車", phone: "119" },
+        { name: "警察局", phone: "110" }
+    ]
+};
+
+// 5. 🗺️ 行程細節 (包含詳細後備方案)
 const USER_ITINERARY = {
-    "day1": { 
+    "day1": { // 9/25 Fri
         "events": [
-            { time: "15:00", title: "抵達峇里島機場 (DPS)", type: "交通", price: "-", address: "Ngurah Rai International Airport", coords: [-8.74817, 115.167], note: "尋找舉著 'Tegal Sari' 牌子的司機。若延誤，透過 WhatsApp 聯繫飯店。", tags: ["移動"], moodColor: "#d44601" },
-            { time: "17:30", title: "入住 Tegal Sari", type: "住宿", price: "Paid", address: "Jl. Hanoman, Padang Tegal, Ubud", coords: [-8.5196, 115.2632], note: "確認房間為 'Upper Floor' 且面向稻田。檢查門鎖與保險箱。", tags: ["入住", "安全"], moodColor: "#177263" },
-            { time: "18:00", title: "Coco Supermarket 採買", type: "購物", price: "Rp 300k", address: "Jl. Raya Pengosekan", coords: [-8.5179, 115.2635], note: "買水、水果、防蚊液、優格。", tags: ["購物"], shopping_items: ["紅酒", "起司", "水果", "飲用水", "防蚊噴霧"] },
-            { time: "19:00", title: "晚餐：Pison Ubud", type: "餐飲", price: "HKD 100", address: "Jl. Hanoman No. 10X", coords: [-8.5178, 115.2637], note: "稻田景觀咖啡廳，週五晚氣氛佳。適合單身女性，環境安全。", tags: ["晚餐", "Chill"], moodColor: "#d44601" },
-            { time: "20:30", title: "飯店陽台休息", type: "休息", price: "-", address: "Tegal Sari Accommodation", coords: [-8.5196, 115.2632], note: "泡茶，聽蟲鳴，享受第一晚的寧靜。", tags: ["休息"], moodColor: "#177263" }
+            {
+                "time": "15:00", "title": "抵達峇里島機場", "type": "交通",
+                "address": "Ngurah Rai International Airport", "tags": ["入境", "移動"], "moodColor": "#d44601",
+                "note": "辦理入境。尋找舉著「Tegal Sari」牌子的司機。若有延誤用 WhatsApp 聯繫飯店。"
+            },
+            {
+                "time": "17:30", "title": "Check-in: Tegal Sari", "type": "住宿",
+                "address": "Jl. Hanoman, Padang Tegal, Ubud", 
+                "coords": [-8.5173, 115.2659], "tags": ["稻田景觀"], "moodColor": "#177263",
+                "note": "確認房間是否為 'Upper Floor' 面稻田。檢查門鎖與保險箱。"
+            },
+            {
+                "time": "18:00", "title": "Coco Supermarket 採買", "type": "購物",
+                "address": "Jl. Raya Pengosekan", "tags": ["補給"], "moodColor": "#5c0d09",
+                "note": "買紅酒、起司、水果、大瓶水、防蚊噴霧(必備)。"
+            },
+            {
+                "time": "19:00", "title": "晚餐: Pison Ubud", "type": "美食",
+                "address": "Jl. Hanoman No. 10X", "tags": ["Chill", "獨旅安全"], "moodColor": "#d44601",
+                "note": "擁有稻田景觀的咖啡廳，氣氛佳且明亮安全，適合單身女性。"
+            },
+            {
+                "time": "20:30", "title": "陽台休息", "type": "休息",
+                "address": "Tegal Sari", "tags": ["放鬆"], "moodColor": "#177263",
+                "note": "泡杯茶，聽蟲鳴，享受第一晚。"
+            }
         ],
         "inspiration": [
-            { title: "按摩備案 (In-room)", tag: "TIRED", type: "SPA", price: "Rp 150k+", time: "10:00 - 22:00", address: "Tegal Sari Accommodation", coords: [-8.5196, 115.2632], note: "如果搭機太累不想出門，直接請飯店安排房內按摩。\n推薦 Balinese Massage (60mins)。" },
-            { title: "KAFE", tag: "SOLO", type: "Cafe", price: "Rp 100k", time: "07:30 - 23:00", address: "Jl. Hanoman No.44B, Ubud", coords: [-8.516, 115.264], note: "非常安全的社交中心，充滿數位遊牧者。有機食物很棒，適合一個人看書、寫日記。" }
+            { 
+                "title": "方案A: 房內按摩 (In-room)", 
+                "tag": "TIRED", 
+                "type": "放鬆",
+                "address": "Tegal Sari Accommodation",
+                "open_hours": "10:00 - 22:00",
+                "price": "Rp 150,000+",
+                "note": "如果搭機太累不想出門，直接請飯店安排房內按摩。推薦 Balinese Massage (60mins)。" 
+            },
+            { 
+                "title": "方案B: KAFE", 
+                "tag": "SOLO", 
+                "type": "美食",
+                "address": "Jl. Hanoman No.44B, Ubud",
+                "open_hours": "07:30 - 23:00",
+                "price": "Rp 100,000",
+                "note": "非常安全的社交中心，充滿數位遊牧者。有機食物很棒，適合一個人看書、寫日記。" 
+            }
         ],
-        "shopping": ["防蚊液", "大瓶水"]
+        "shopping": ["大瓶礦泉水", "防蚊噴霧", "紅酒/起司", "熱帶水果"]
     },
-    "day2": {
+    "day2": { // 9/26 Sat
         "events": [
-            { time: "09:30", title: "包車出發", type: "交通", price: "-", address: "Tegal Sari Lobby", coords: [-8.5196, 115.2632], note: "攜帶泳衣(若要下水)、毛巾、水。", tags: ["包車"], moodColor: "#d44601" },
-            { time: "09:45", title: "BMC Money Changer", type: "換匯", price: "-", address: "Jl. Raya Pengosekan Ubud No.108", coords: [-8.5179, 115.2635], note: "匯率較好且安全，保留收據。", tags: ["必辦"], moodColor: "#177263" },
-            { time: "10:30", title: "Gunung Kawi Sebatu", type: "體驗", price: "Rp 50k", address: "Sebatu, Tegallalang", coords: [-8.3844, 115.293], note: "水淨化儀式 (Melukat)。遊客較少，能量乾淨清涼。", tags: ["淨化", "必去"], moodColor: "#177263" },
-            { time: "12:00", title: "午餐：景觀餐廳", type: "餐飲", price: "-", address: "Kintamani Area", coords: [-8.283, 115.364], note: "請司機推薦風景好、乾淨的餐廳 (Nasi Goreng / Satay)。", tags: ["午餐"], moodColor: "#d44601" },
-            { time: "13:30", title: "Svasensa Perfume Workshop", type: "活動", price: "Rp 459k", address: "Toya Ubud Eco Park", coords: [-8.439, 115.281], note: "初階調香 (90 mins)。學習香氛基礎，製作個人樣本。", tags: ["調香", "必去"], moodColor: "#d44601" },
-            { time: "16:00", title: "面具博物館", type: "文化", price: "Donation", address: "Setia Darma House of Mask", coords: [-8.5342, 115.2792], note: "環境極為清幽，數千件傳統收藏。", tags: ["博物館"], moodColor: "#177263" },
-            { time: "17:30", title: "返回飯店放戰利品", type: "交通", price: "-", address: "Tegal Sari", coords: [-8.5196, 115.2632], note: "稍作休息。", tags: ["休息"], moodColor: "#177263" },
-            { time: "18:30", title: "晚餐：The Yoga Barn", type: "餐飲", price: "Rp 100k", address: "Jl. Hanoman", coords: [-8.5193, 115.2653], note: "Garden Kafe. 有機健康料理，環境放鬆。", tags: ["健康"], moodColor: "#d44601" }
+            {
+                "time": "09:30", "title": "包車出發 (往北)", "type": "交通",
+                "address": "Tegal Sari Lobby", "tags": ["包車"], "moodColor": "#d44601",
+                "note": "攜帶泳衣(若要下水)、毛巾、飲用水。今日為感官療癒日。"
+            },
+            {
+                "time": "10:30", "title": "Pura Mengening 秘密神社", "type": "體驗",
+                "address": "Jl. Tirta No. 25M, Tampaksiring", "coords": [-8.4235, 115.3120],
+                "tags": ["淨化", "能量"], "moodColor": "#177263",
+                "note": "避開聖泉寺人潮，進行 Melukat 水淨化儀式。門票 Rp 30k + 沙龍 10k。"
+            },
+            {
+                "time": "13:00", "title": "Svasensa 調香工作坊", "type": "活動",
+                "address": "Toya Ubud EcoPark, Jl. Raya Kenderan", "tags": ["調香", "必去"], "moodColor": "#d44601",
+                "note": "在叢林峽谷邊調製專屬香水，環境極美。費用約 Rp 459,000。"
+            },
+            {
+                "time": "16:00", "title": "Pyramids of Chi", "type": "療癒",
+                "address": "Jalan Kelebang Moding No. 22", "tags": ["聲療", "玄學"], "moodColor": "#177263",
+                "note": "預約 Ancient Sound Healing (US$ 25)。躺著透過銅鑼聲波釋放壓力。"
+            },
+            {
+                "time": "18:30", "title": "晚餐: The Yoga Barn", "type": "美食",
+                "address": "Jl. Hanoman, Ubud", "tags": ["健康有機"], "moodColor": "#d44601",
+                "note": "Garden Kafe。吃清淡的有機料理，延續療癒感。"
+            }
         ],
         "inspiration": [
-            { title: "Ganesha Bookshop", tag: "RAINY", type: "文化", price: "-", time: "09:00 - 18:00", address: "Jl. Raya Ubud, Ubud", coords: [-8.506, 115.262], note: "如果下雨，這裡是躲避的好地方。專賣印尼文化書籍，也有二手書，氣氛安靜。" },
-            { title: "Lazy Cats Cafe", tag: "TIRED", type: "Cafe", price: "Rp 80k", time: "08:00 - 21:00", address: "Jl. Raya Ubud No.11", coords: [-8.504, 115.257], note: "不想走動時，這裡有很舒服的復古沙發。由素食藝術家經營，適合放空。" }
+            { 
+                "title": "方案A: Ganesha Bookshop", 
+                "tag": "RAINY", 
+                "type": "閱讀",
+                "address": "Jl. Raya Ubud, Ubud",
+                "open_hours": "09:00 - 18:00",
+                "note": "如果下雨，這裡是躲避的好地方。專賣印尼文化書籍，也有二手書，氣氛安靜。" 
+            },
+            { 
+                "title": "方案B: Lazy Cats Cafe", 
+                "tag": "TIRED", 
+                "type": "休息",
+                "address": "Jl. Raya Ubud No.11",
+                "open_hours": "08:00 - 21:00",
+                "note": "不想走動時，這裡有很舒服的復古沙發。由素食藝術家經營，適合放空。" 
+            }
         ],
-        "shopping": ["博物館小紀念品"]
+        "shopping": ["自製香水"]
     },
-    "day3": {
+    "day3": { // 9/27 Sun
         "events": [
-            { time: "09:30", title: "ARMA Museum", type: "藝術", price: "Rp 150k", address: "Jl. Raya Pengosekan", coords: [-8.5229, 115.2632], note: "在皇家花園般的博物館散步，欣賞傳統繪畫。", tags: ["藝術"], moodColor: "#177263" },
-            { time: "11:30", title: "Andong 古董街", type: "購物", price: "-", address: "Jalan Raya Andong", coords: [-8.5077, 115.2710], note: "搭車去上游，慢慢逛下來。木雕、復古小物。", tags: ["購物"], moodColor: "#d44601" },
-            { time: "13:30", title: "返回飯店附近", type: "交通", price: "-", address: "Tegal Sari", coords: [-8.5196, 115.2632], note: "放下戰利品。", tags: ["休息"], moodColor: "#177263" },
-            { time: "14:00", title: "午餐：髒鴨飯總店", type: "餐飲", price: "Rp 200k", address: "Bebek Bengil, Jl. Hanoman", coords: [-8.5178, 115.2637], note: "就在飯店旁邊。稻田涼亭位，經典必吃。", tags: ["美食"], moodColor: "#d44601" },
-            { time: "16:00", title: "按摩：Jaens Spa", type: "SPA", price: "Rp 300k+", address: "Jl. Raya Pengosekan", coords: [-8.517, 115.263], note: "Balinese Massage 90mins. 就在附近，走路可到。", tags: ["放鬆"], moodColor: "#177263" },
-            { time: "18:30", title: "晚餐：Kebun Bistro", type: "餐飲", price: "Rp 200k", address: "Jl. Hanoman No.44", coords: [-8.5136, 115.2642], note: "法式鄉村風，紅白酒豐富。適合獨酌。", tags: ["微醺"], moodColor: "#d44601" }
+            {
+                "time": "09:30", "title": "ARMA 藝術博物館", "type": "藝術",
+                "address": "Jl. Raya Pengosekan", "tags": ["文化", "散步"], "moodColor": "#177263",
+                "note": "像皇家花園般的園區，欣賞傳統繪畫。"
+            },
+            {
+                "time": "11:30", "title": "Andong 古董街", "type": "逛街",
+                "address": "Jalan Raya Andong", "tags": ["淘寶"], "moodColor": "#d44601",
+                "note": "建議搭車到上游，慢慢往下坡走逛下來比較省力。"
+            },
+            {
+                "time": "14:00", "title": "午餐: 髒鴨飯 Bebek Bengil", "type": "美食",
+                "address": "Bebek Bengil, Jl. Hanoman", "tags": ["經典", "稻田"], "moodColor": "#d44601",
+                "note": "就在飯店旁。務必選稻田邊涼亭座位。"
+            },
+            {
+                "time": "15:30", "title": "吠陀占星: Ashish", "type": "玄學",
+                "address": "Jl. Subak Sok Wayah", "tags": ["占星", "必去"], "moodColor": "#177263",
+                "note": "車開不進去。在 Ubud Main Road 入口下車，步行15分經稻田步道(很美)。"
+            },
+            {
+                "time": "18:30", "title": "晚餐: Kebun Bistro", "type": "小酌",
+                "address": "Jl. Hanoman No.44", "tags": ["法式", "微醺"], "moodColor": "#d44601",
+                "note": "法式鄉村風，紅白酒豐富，適合優雅獨酌。"
+            }
         ],
         "inspiration": [
-            { title: "找個 Balian", tag: "SPIRIT", type: "玄學", price: "隨喜 (約Rp 300k)", time: "需預約", address: "Ubud Area (Ask Driver)", coords: [-8.5069, 115.2625], note: "如果對命理有興趣，可嘗試當地的傳統治療師 (Balian)。\n請司機推薦可靠的師傅，通常包含手相或能量解讀。" },
-            { title: "Pyramids of Chi", tag: "TIRED", type: "療癒", price: "US$ 25", time: "10:00 / 14:00", address: "Jalan Kelebang Moding, Bentuyung", coords: [-8.486, 115.263], note: "聲頻療癒 (Sound Healing)。完全躺著不動，透過銅鑼聲波進行深度放鬆，非常適合舒緩旅途疲勞。" }
+            { 
+                "title": "方案A: BMC Money Changer", 
+                "tag": "必辦", 
+                "type": "服務",
+                "address": "Jl. Raya Pengosekan Ubud No.108",
+                "open_hours": "08:00 - 21:00",
+                "note": "如果還沒換錢，這家匯率公道且安全。" 
+            }
         ],
-        "shopping": ["木雕", "銀器"]
+        "shopping": ["木雕小物", "銀器", "復古裝飾"]
     },
-    "day4": {
+    "day4": { // 9/28 Mon
         "events": [
-            { time: "08:00", title: "Ubud Morning Market", type: "市集", price: "-", address: "Jl. Raya Ubud", coords: [-8.5065, 115.2625], note: "感受當地生活，買新鮮芒果、山竹。", tags: ["早起"], moodColor: "#d44601" },
-            { time: "09:30", title: "Blue Stone Botanicals", type: "購物", price: "-", address: "Jl. Dewi Sita", coords: [-8.5100, 115.2640], note: "天然精油，雨林靈感。", tags: ["香氛"], moodColor: "#177263" },
-            { time: "10:15", title: "Bohe Bali Perfumery", type: "購物", price: "-", address: "Jl. Monkey Forest", coords: [-8.5124, 115.2609], note: "精緻包裝香水，適合送禮。", tags: ["香氛"], moodColor: "#177263" },
-            { time: "11:00", title: "OILAND", type: "購物", price: "-", address: "Jl. Hanoman No.30a", coords: [-8.5196, 115.2632], note: "天然身體護膚油。", tags: ["香氛"], moodColor: "#177263" },
-            { time: "11:30", title: "午餐：Taco Casa / 休息", type: "餐飲", price: "Rp 60k", address: "Jl. Pengosekan", coords: [-8.531, 115.264], note: "簡單午餐，回飯店休息避暑。", tags: ["午餐"], moodColor: "#d44601" },
-            { time: "14:00", title: "按摩：Putri Bali Spa 2", type: "SPA", price: "Rp 150k", address: "Jl. Hanoman", coords: [-8.513, 115.263], note: "飯店附近的平價優質選擇 (替換 Karsa Spa)，省去舟車勞頓。", tags: ["放鬆"], moodColor: "#177263" },
-            { time: "18:30", title: "晚餐：Laminak", type: "餐飲", price: "Rp 250k", address: "Jl. Raya Pengosekan", coords: [-8.517, 115.263], note: "巴斯克/西班牙料理，氣氛溫馨，Tapas。", tags: ["晚餐"], moodColor: "#d44601" }
+            {
+                "time": "08:00", "title": "Ubud Morning Market", "type": "市集",
+                "address": "Jl. Raya Ubud", "tags": ["早起", "在地"], "moodColor": "#d44601",
+                "note": "感受生活氣息，買新鮮芒果、山竹。"
+            },
+            {
+                "time": "09:30", "title": "香氛巡禮 (Blue Stone/Bohe)", "type": "購物",
+                "address": "Jl. Dewi Sita", "tags": ["精油", "香水"], "moodColor": "#177263",
+                "note": "Blue Stone (雨林精油), Bohe (香水), Oiland (護膚油)。"
+            },
+            {
+                "time": "11:30", "title": "午餐: Taco Casa", "type": "美食",
+                "address": "Jl. Pengosekan", "tags": ["墨西哥"], "moodColor": "#d44601",
+                "note": "簡單快速好吃，吃完回飯店避暑。"
+            },
+            {
+                "time": "14:00", "title": "Putri Bali Spa 2", "type": "按摩",
+                "address": "Jl. Hanoman", "tags": ["SPA", "放鬆"], "moodColor": "#177263",
+                "note": "飯店附近的優質平價選擇。預算約 Rp 150,000。"
+            },
+            {
+                "time": "18:30", "title": "晚餐: Hujan Locale", "type": "美食",
+                "address": "Jl. Sri Wedari No. 5", "tags": ["Fine Dining", "印尼菜"], "moodColor": "#d44601",
+                "note": "推薦一樓吧台或二樓靠窗。必點 Bebek Goreng 或 Rendang。"
+            }
         ],
         "inspiration": [
-            { title: "Threads of Life", tag: "PHOTO", type: "文化/購物", price: "-", time: "10:00 - 19:00", address: "Jl. Kajeng No.24", coords: [-8.504, 115.263], note: "一家像博物館的紡織品店。支持偏鄉婦女的手工藝，非常精緻，拍照很美，但單價較高。" },
-            { title: "Room 4 Dessert", tag: "FOOD", type: "甜點", price: "Rp 400k+", time: "16:00 - 22:00", address: "Jl. Raya Sanggingan", coords: [-8.495, 115.253], note: "如果有空位，去試試這家上過 Netflix 的甜點 Fine Dining。適合慶祝或犒賞自己。" }
+            { 
+                "title": "方案A: Threads of Life", 
+                "tag": "PHOTO", 
+                "type": "逛街",
+                "address": "Jl. Kajeng No.24",
+                "open_hours": "10:00 - 19:00",
+                "note": "一家像博物館的紡織品店。支持偏鄉婦女的手工藝，非常精緻，拍照很美，但單價較高。" 
+            },
+            { 
+                "title": "方案B: Room 4 Dessert", 
+                "tag": "FOOD", 
+                "type": "甜點",
+                "address": "Jl. Raya Sanggingan",
+                "open_hours": "16:00 - 22:00",
+                "price": "Rp 400,000+",
+                "note": "如果有空位，去試試這家上過 Netflix 的知名甜點 Fine Dining。適合慶祝或犒賞自己。" 
+            }
         ],
-        "shopping": ["熱帶水果", "天然精油", "護膚油"]
+        "shopping": ["Blue Stone 精油", "Bohe 香水", "新鮮水果"]
     },
-    "day5": {
+    "day5": { // 9/29 Tue
         "events": [
-            { time: "11:00", title: "最後採買 (Coco Supermarket)", type: "購物", price: "-", address: "Coco Supermarket", coords: [-8.5179, 115.2635], note: "補齊伴手禮：巧克力、香氛小物。", tags: ["購物"], moodColor: "#d44601" },
-            { time: "12:00", title: "包車接送", type: "交通", price: "-", address: "Tegal Sari", coords: [-8.5196, 115.2632], note: "Private Car.", tags: ["包車"], moodColor: "#d44601" },
-            { time: "12:30", title: "Svasensa Atelier", type: "活動", price: "Rp 600k", address: "Toya Ubud Eco Park", coords: [-8.439, 115.281], note: "進階調香 Session (3.5hrs)。製作大師級香精。", tags: ["調香", "深度"], moodColor: "#177263" },
-            { time: "17:30", title: "Sayan House 夕陽晚餐", type: "餐飲", price: "Rp 400k", address: "Jl. Raya Sayan No.70", coords: [-8.5002, 115.2382], note: "懸崖邊看日落，日式拉丁融合菜。一定要訂位。", tags: ["日落", "必去"], moodColor: "#d44601" },
-            { time: "20:00", title: "返回飯店", type: "交通", price: "-", address: "Tegal Sari", coords: [-8.5196, 115.2632], note: "整理行李。", tags: ["整理"], moodColor: "#177263" }
+            {
+                "time": "09:00", "title": "Jero Gede 傳統治療", "type": "玄學",
+                "address": "Keliki / Sebatu Area", "tags": ["療癒", "重點"], "moodColor": "#177263",
+                "note": "GetYourGuide 預訂行程。包含司機與翻譯。Jero 擅長讀取能量。"
+            },
+            {
+                "time": "14:00", "title": "Bintang Supermarket", "type": "購物",
+                "address": "Jl. Raya Sanggingan No. 45", "tags": ["最後採買"], "moodColor": "#177263",
+                "note": "買 Sensatia 保養品、Bokashi 草藥油 (伴手禮)。"
+            },
+            {
+                "time": "17:30", "title": "Sayan House 夕陽晚餐", "type": "美食",
+                "address": "Jl. Raya Sayan No.70", "tags": ["絕景", "日落"], "moodColor": "#d44601",
+                "note": "懸崖邊看日落，日式拉美 Fusion 菜。需預約。預算 Rp 400,000。"
+            },
+            {
+                "time": "20:00", "title": "整理行李", "type": "整理",
+                "address": "Tegal Sari", "tags": ["打包"], "moodColor": "#5c0d09",
+                "note": "把戰利品打包，檢查證件。"
+            }
         ],
         "inspiration": [
-            { title: "Hujan Locale", tag: "RAINY", type: "餐飲", price: "Rp 300k", time: "12:00 - 15:00, 17:30 - 22:00", address: "Jl. Sri Wedari No.5", coords: [-8.505, 115.264], note: "如果下雨看不到夕陽，改吃這家著名的印尼菜 (店名意思就是'雨')。創意現代印尼料理。" },
-            { title: "Campuhan Ridge", tag: "PHOTO", type: "健行", price: "Free", time: "16:00 - 18:00", address: "Campuhan Ridge Walk", coords: [-8.503, 115.255], note: "如果調香提早結束，可去走這條著名的山脊步道。視野開闊，適合黃昏散步。" }
+            { 
+                "title": "方案A: Campuhan Ridge Walk", 
+                "tag": "PHOTO", 
+                "type": "風景",
+                "address": "Campuhan Ridge Walk",
+                "open_hours": "全天",
+                "price": "Free",
+                "note": "如果下午行程提早結束，可去走這條著名的山脊步道。視野開闊，適合黃昏散步拍照。" 
+            }
         ],
-        "shopping": ["巧克力", "香氛"]
+        "shopping": ["Sensatia 保養品", "Bokashi 油"]
     },
-    "day6": {
+    "day6": { // 9/30 Wed
         "events": [
-            { time: "09:00", title: "飯店早餐 & 收拾", type: "休息", price: "-", address: "Tegal Sari", coords: [-8.5196, 115.2632], note: "在陽台享受最後的寧靜，檢查抽屜。", tags: ["整理"], moodColor: "#177263" },
-            { time: "11:00", title: "前往機場 (DPS)", type: "交通", price: "-", address: "DPS Airport", coords: [-8.7481, 115.167], note: "CX784 (16:10 起飛)。預留 2 小時以上。", tags: ["移動"], moodColor: "#d44601" },
-            { time: "13:30", title: "機場免稅店", type: "購物", price: "-", address: "DPS Duty Free", coords: [-8.7481, 115.167], note: "消耗剩下的印尼盾。", tags: ["購物"], moodColor: "#d44601" }
+            {
+                "time": "09:00", "title": "最後早餐 & Check-out", "type": "住宿",
+                "address": "Tegal Sari", "tags": ["退房"], "moodColor": "#177263",
+                "note": "享受最後寧靜，檢查抽屜遺漏物品。"
+            },
+            {
+                "time": "11:00", "title": "前往機場 (DPS)", "type": "交通",
+                "address": "Ngurah Rai International Airport", "tags": ["回程"], "moodColor": "#d44601",
+                "note": "車程預估 2 小時。搭乘 CX784 (16:10 起飛)。"
+            },
+            {
+                "time": "13:30", "title": "機場免稅店", "type": "購物",
+                "address": "DPS Duty Free", "tags": ["消耗現鈔"], "moodColor": "#d44601",
+                "note": "把剩下的印尼盾花完。"
+            }
         ],
         "inspiration": [
-            { title: "Seniman Coffee", tag: "TIRED", type: "Cafe", price: "Rp 50k", time: "07:30 - 22:00", address: "Jl. Sri Wedari No.5", coords: [-8.505, 115.264], note: "如果時間還早，去喝烏布最強咖啡再走。著名的搖搖椅座位。" }
+            { 
+                "title": "方案A: Seniman Coffee", 
+                "tag": "TIRED", 
+                "type": "咖啡",
+                "address": "Jl. Sri Wedari No.5",
+                "open_hours": "07:30 - 22:00",
+                "price": "Rp 50,000",
+                "note": "如果時間還早，去喝杯烏布最強咖啡再走。著名的搖搖椅座位。" 
+            }
         ],
         "shopping": ["免稅品"]
     }
 };
-</script>
 
+// 6. 🗣️ 常用短語 (Indonesian)
+const PHRASE_DATA = [
+    {
+        category: "司機溝通",
+        items: [
+            { term_primary: "Pak, tolong ke sini", term_secondary: "先生，請載我去這裡", term_pronounce: "Pak, to-long ke si-ni" },
+            { term_primary: "Terima Kasih", term_secondary: "謝謝", term_pronounce: "Te-ri-ma Ka-sih" },
+            { term_primary: "Tunggu sebentar", term_secondary: "請等一下", term_pronounce: "Tung-gu se-ben-tar" }
+        ]
+    },
+    {
+        category: "餐廳/購物",
+        items: [
+            { term_primary: "Berapa harganya?", term_secondary: "多少錢？", term_pronounce: "Be-ra-pa har-ga-nya" },
+            { term_primary: "Tidak mau pedas", term_secondary: "不要辣", term_pronounce: "Ti-dak mau pe-das" },
+            { term_primary: "Bill, please", term_secondary: "請結帳 (Minta Bon)", term_pronounce: "Min-ta Bon" }
+        ]
+    }
+];
+</script>
+    
 <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Action Completed</span></div>
 <header>
-    <div>
-        <h1 id="app-title">烏布香氛慢活之旅</h1>
-        <div id="local-clock">--:--</div>
-    </div>
-    <div class="header-actions">
-        <div class="header-btn" onclick="openTranslate()"><i class="fa-solid fa-language"></i></div>
-        <div class="header-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></div>
-    </div>
+<div>
+<h1 id="app-title">TRIP PLANNER</h1>
+<div id="home-clock">--:--</div>
+</div>
+<div class="header-actions">
+<div class="header-btn" onclick="openTranslate()"><i class="fa-solid fa-language"></i></div>
+<div class="header-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></div>
+</div>
 </header>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 <div class="sidebar" id="sidebar">
-    <div class="tool-box">
-        <div style="font-weight:bold; margin-bottom:15px; color:var(--text-main);">匯率換算</div>
-        <div class="currency-grid">
-            <div class="curr-group"><span class="curr-label" id="lbl-curr-target">TARGET</span><input type="number" id="curr-jpy" class="curr-input" placeholder="0" oninput="convertCurrency()"></div>
-            <div style="text-align:center;"><i class="fa-solid fa-right-left"></i></div>
-            <div class="curr-group"><span class="curr-label" id="lbl-curr-base">BASE</span><input type="number" id="curr-hkd" class="curr-input" placeholder="0" readonly></div>
-        </div>
-    </div>
+<div class="sidebar-menu-btn" onclick="openPhrasePage()">
+<i class="fa-solid fa-book-open"></i> 📖 旅行短語
+</div>
+<div class="whatsapp-box">
+<div style="font-weight:bold; margin-bottom:5px;"><i class="fa-brands fa-whatsapp"></i> 安全 Check-in</div>
+<input type="tel" id="wa-phone" class="wa-input" placeholder="對方電話 (如 85291234567)">
+<button class="wa-btn" id="wa-btn" onclick="sendWhatsApp()"><i class="fa-solid fa-paper-plane"></i> 發送位置</button>
+</div>
+<div class="sidebar-section-title">工具箱</div>
+<div class="tool-box">
+<div style="font-weight:bold; margin-bottom:15px;">匯率換算</div>
+<div class="currency-grid">
+<div class="curr-group"><span class="curr-label" id="lbl-curr-target">TARGET</span><input type="number" id="curr-jpy" class="curr-input" placeholder="0" oninput="convertCurrency()"></div>
+<div class="curr-icon"><i class="fa-solid fa-right-left"></i></div>
+<div class="curr-group"><span class="curr-label" id="lbl-curr-base">BASE</span><input type="number" id="curr-hkd" class="curr-input" placeholder="0" readonly></div>
+</div>
+<div class="rate-info-container">
+<div id="rate-status" class="rate-status">載入中...</div>
+<div style="display:flex; gap:10px;"><span onclick="fetchRates(true)" style="color:#007AFF; cursor:pointer;">刷新</span></div>
+</div>
+</div>
+<div class="tool-box">
+<div style="font-weight:bold; margin-bottom:10px;">隨手記</div>
+<textarea id="quick-memo" class="memo-area" placeholder="筆記..." oninput="saveMemo()"></textarea>
+</div>
 </div>
 <div id="phrase-overlay" class="phrase-overlay" onclick="closePhrase()">
-    <div class="phrase-content"><div id="overlay-jp" class="phrase-big"></div><div id="overlay-zh" class="phrase-sub" style="color:var(--text-sub)"></div></div>
-    <div class="close-phrase">關閉</div>
+<div class="phrase-content"><div id="overlay-jp" class="phrase-big"></div><div id="overlay-zh" class="phrase-sub"></div></div>
+<div class="close-phrase">關閉</div>
 </div>
 <div class="date-selector-container"><div class="date-selector" id="date-selector"></div></div>
 <main>
-    <div id="page-itinerary" class="page active"><div class="timeline-container" id="timeline-container"></div></div>
-    <div id="page-inspiration" class="page">
-        <div class="filter-bar-container">
-            <span class="filter-chip active" onclick="filterInspiration('all', this)">全部</span>
-            <span class="filter-chip" onclick="filterInspiration('RAINY', this)">☔ 雨天</span>
-            <span class="filter-chip" onclick="filterInspiration('TIRED', this)">☕ 休息</span>
-            <span class="filter-chip" onclick="filterInspiration('SPIRIT', this)">✨ 玄學</span>
-            <span class="filter-chip" onclick="filterInspiration('PHOTO', this)">📷 拍照</span>
-        </div>
-        <div id="inspiration-container" class="shopping-list" style="padding:0 20px;"></div>
-    </div>
-    <div id="page-shopping" class="page"><div class="page-header"><h2 class="page-title">購物清單</h2></div><div id="shopping-container" class="shopping-list"></div></div>
-    <div id="page-weather" class="page">
-        <div id="weather-content"><div style="text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin" style="color:var(--accent)"></i></div></div>
-        <div id="weather-details-container" style="display:none;">
-            <div class="weather-grid">
-                <div class="weather-stat-card"><span class="ws-value" id="ws-humidity">--%</span><span class="ws-label">濕度</span></div>
-                <div class="weather-stat-card"><span class="ws-value" id="ws-uv">--</span><span class="ws-label">紫外線</span></div>
-            </div>
-            <div style="padding:20px; text-align:center; color:var(--text-sub); font-size:0.8rem;" id="weather-advice-text"></div>
-        </div>
-    </div>
+<div id="page-itinerary" class="page active"><div class="timeline-container" id="timeline-container"></div></div>
+<div id="page-inspiration" class="page">
+<div class="filter-bar-container">
+<span class="filter-chip active" onclick="filterInspiration('all', this)">全部</span>
+<span class="filter-chip" onclick="filterInspiration('RAINY', this)">☔ 雨天</span>
+<span class="filter-chip" onclick="filterInspiration('TIRED', this)">☕ 休息</span>
+<span class="filter-chip" onclick="filterInspiration('PHOTO', this)">📷 拍照</span>
+</div>
+<div id="inspiration-container" class="inspiration-grid"></div>
+</div>
+<div id="page-shopping" class="page"><div class="page-header"><h2 class="page-title">購物清單</h2></div><div id="shopping-container" class="shopping-list"></div></div>
+<div id="page-weather" class="page">
+<div id="weather-content"><div style="text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin"></i></div></div>
+<div id="weather-details-container" style="display:none;">
+<span class="section-label">今日時段預報 (3小時)</span>
+<div class="hourly-container" id="weather-hourly"></div>
+<span class="section-label" style="margin-top:10px;">旅行者建議</span>
+<div class="advice-card">
+<div class="advice-icon"><i class="fa-solid fa-shirt"></i></div>
+<div class="advice-content"><h4>穿搭指南</h4><p id="weather-advice-text">載入中...</p></div>
+</div>
+<span class="section-label">詳細數據</span>
+<div class="weather-grid">
+<div class="weather-stat-card"><div class="ws-row"><span class="ws-label">濕度</span><i class="fa-solid fa-droplet ws-icon"></i></div><div class="ws-value" id="ws-humidity">--%</div><div class="ws-sub">易感濕度</div></div>
+<div class="weather-stat-card"><div class="ws-row"><span class="ws-label">紫外線</span><i class="fa-solid fa-sun ws-icon"></i></div><div class="ws-value" id="ws-uv">--</div><div class="ws-sub">等級</div></div>
+<div class="weather-stat-card"><div class="ws-row"><span class="ws-label">日出</span><i class="fa-regular fa-clock ws-icon"></i></div><div class="ws-value" id="ws-sunrise">--:--</div></div>
+<div class="weather-stat-card"><div class="ws-row"><span class="ws-label">日落</span><i class="fa-solid fa-moon ws-icon"></i></div><div class="ws-value" id="ws-sunset">--:--</div></div>
+</div>
+<div style="text-align:center; padding-bottom:30px; color:var(--text-sub); font-size:0.75rem;">資料來源: Open-Meteo <span id="data-source-tag"></span></div>
+</div>
+</div>
+<div id="page-info" class="page">
+<div class="page-header"><h2 class="page-title">旅程資訊</h2></div>
+<div id="dynamic-info-content"></div>
+</div>
+<div id="page-phrases" class="page">
+<div class="page-header"><h2 class="page-title">常用短語</h2></div>
+<div id="phrases-container"></div>
+</div>
 </main>
 <nav class="bottom-nav">
-    <div class="nav-item active" onclick="switchMainPage('itinerary', this)"><i class="fa-solid fa-calendar-days"></i><span>行程</span></div>
-    <div class="nav-item" onclick="switchMainPage('inspiration', this)"><i class="fa-solid fa-compass"></i><span>靈感</span></div>
-    <div class="nav-item" onclick="switchMainPage('shopping', this)"><i class="fa-solid fa-basket-shopping"></i><span>採買</span></div>
-    <div class="nav-item" onclick="switchMainPage('weather', this)"><i class="fa-solid fa-cloud-sun"></i><span>天氣</span></div>
+<div class="nav-item active" onclick="switchMainPage('itinerary', this)"><i class="fa-regular fa-calendar-days"></i><span>行程</span></div>
+<div class="nav-item" onclick="switchMainPage('inspiration', this)"><i class="fa-regular fa-compass"></i><span>靈感</span></div>
+<div class="nav-item" onclick="switchMainPage('shopping', this)"><i class="fa-solid fa-bag-shopping"></i><span>採買</span></div>
+<div class="nav-item" onclick="switchMainPage('weather', this)"><i class="fa-solid fa-cloud-sun"></i><span>天氣</span></div>
+<div class="nav-item" onclick="switchMainPage('info', this)"><i class="fa-solid fa-sliders"></i><span>資訊</span></div>
 </nav>
-
 <div id="detail-modal" class="modal">
-    <div class="modal-content">
-        <div class="modal-handle-container" id="modal-drag-area"><div class="modal-handle"></div></div>
-        <div id="modal-mini-map" style="height:200px; width:100%; background:#eee;"></div>
-        <div class="modal-body">
-            <div style="margin-bottom:20px; margin-top:20px;">
-                <span class="modal-label" id="modal-type">Type</span>
-                <h2 id="modal-title" style="margin:0; font-size:1.6rem; font-family:var(--font-heading); color:var(--accent);">Title</h2>
-            </div>
-            <div class="modal-info-grid">
-                <div><span class="modal-label">時間</span><span class="modal-value" id="modal-time"></span></div>
-                <div><span class="modal-label">預算/價格</span><span class="modal-value" id="modal-price"></span></div>
-                <div style="grid-column: span 2;"><span class="modal-label">地址</span><span class="modal-value" id="modal-address-short" style="font-size:0.9rem;"></span></div>
-            </div>
-            <div class="modal-label">詳細說明</div>
-            <div class="modal-note-box"><div id="modal-note" class="modal-note-content"></div></div>
-            <div class="modal-actions" id="modal-actions"></div>
-        </div>
-    </div>
+<div class="modal-content">
+<div class="modal-handle-container" id="modal-drag-area"><div class="modal-handle"></div></div>
+<div id="modal-mini-map"></div>
+<div class="modal-body">
+<div style="margin-bottom:15px;"><span class="modal-label" id="modal-type">Type</span><h2 id="modal-title" style="margin:0; font-size:1.4rem; font-family:var(--font-heading);">Title</h2></div>
+<div class="modal-info-grid">
+<div><span class="modal-label">時間</span><span class="modal-value" id="modal-time"></span></div>
+<div><span class="modal-label">預算</span><span class="modal-value" id="modal-price"></span></div>
+<div><span class="modal-label">開放時間</span><span class="modal-value" id="modal-open-hours"></span></div>
+<div><span class="modal-label">地址</span><span class="modal-value" id="modal-address-short" style="font-size:0.9rem;"></span></div>
+</div>
+<div class="modal-label">備註</div><div class="modal-note-box"><div id="modal-note" class="modal-note-content"></div></div>
+<div class="modal-actions" id="modal-actions"></div>
+</div>
+</div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
-// --- [System Logic] ---
+// 1. 🎨 應用主題
 function applyTheme() {
-    const root = document.documentElement;
-    if(THEME_CONFIG.accentColor) root.style.setProperty('--accent', THEME_CONFIG.accentColor);
-    if(THEME_CONFIG.accentText) root.style.setProperty('--accent-text', THEME_CONFIG.accentText);
-    if(THEME_CONFIG.backgroundColor) root.style.setProperty('--bg-body', THEME_CONFIG.backgroundColor);
-    if(THEME_CONFIG.cardColor) root.style.setProperty('--bg-card', THEME_CONFIG.cardColor);
-    if(THEME_CONFIG.textColor) root.style.setProperty('--text-main', THEME_CONFIG.textColor);
-    if(THEME_CONFIG.textSubColor) root.style.setProperty('--text-sub', THEME_CONFIG.textSubColor);
-    if(THEME_CONFIG.borderColor) root.style.setProperty('--border', THEME_CONFIG.borderColor);
-    if(THEME_CONFIG.fontHeading) root.style.setProperty('--font-heading', THEME_CONFIG.fontHeading);
-    if(THEME_CONFIG.fontBody) root.style.setProperty('--font-body', THEME_CONFIG.fontBody);
-    if(THEME_CONFIG.googleFontsUrl) {
-        const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = THEME_CONFIG.googleFontsUrl; document.head.appendChild(link);
-    }
+const root = document.documentElement;
+if(THEME_CONFIG.accentColor) root.style.setProperty('--accent', THEME_CONFIG.accentColor);
+if(THEME_CONFIG.accentText) root.style.setProperty('--accent-text', THEME_CONFIG.accentText);
+if(THEME_CONFIG.backgroundColor) root.style.setProperty('--bg-body', THEME_CONFIG.backgroundColor);
+if(THEME_CONFIG.cardColor) root.style.setProperty('--bg-card', THEME_CONFIG.cardColor);
+if(THEME_CONFIG.textColor) root.style.setProperty('--text-main', THEME_CONFIG.textColor);
+if(THEME_CONFIG.textSubColor) root.style.setProperty('--text-sub', THEME_CONFIG.textSubColor);
+if(THEME_CONFIG.borderColor) root.style.setProperty('--border', THEME_CONFIG.borderColor);
+if(THEME_CONFIG.fontHeading) root.style.setProperty('--font-heading', THEME_CONFIG.fontHeading);
+if(THEME_CONFIG.fontBody) root.style.setProperty('--font-body', THEME_CONFIG.fontBody);
+if(THEME_CONFIG.googleFontsUrl) {
+const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = THEME_CONFIG.googleFontsUrl; document.head.appendChild(link);
 }
+}
+
+// 2. 🗓️ 生成日期資料
 function generateScheduleData() {
-    const dates = {};
-    const baseDate = new Date(CONFIG.startDate);
-    const duration = CONFIG.duration || 6; 
-    const weekDays = ["週日", "週一", "週二", "週三", "週四", "週五", "週六"];
-    for(let i=0; i<duration; i++) {
-        const d = new Date(baseDate); d.setDate(baseDate.getDate() + i);
-        const dayKey = `day${i+1}`;
-        const yyyy = d.getFullYear(); const mm = String(d.getMonth() + 1).padStart(2, '0'); const dd = String(d.getDate()).padStart(2, '0');
-        dates[dayKey] = {
-            date: `${yyyy}-${mm}-${dd}`, display: `${mm}/${dd}`, weekday: weekDays[d.getDay()],
-            events: (USER_ITINERARY[dayKey] && USER_ITINERARY[dayKey].events) || [],
-            inspiration: (USER_ITINERARY[dayKey] && USER_ITINERARY[dayKey].inspiration) || [],
-            shopping: (USER_ITINERARY[dayKey] && USER_ITINERARY[dayKey].shopping) || []
-        };
-    }
-    return dates;
+const dates = {};
+const baseDate = new Date(CONFIG.startDate);
+const duration = CONFIG.duration || 5;
+const weekDays = ["週日", "週一", "週二", "週三", "週四", "週五", "週六"];
+for(let i=0; i<duration; i++) {
+const d = new Date(baseDate); d.setDate(baseDate.getDate() + i);
+const dayKey = `day${i+1}`;
+const yyyy = d.getFullYear(); const mm = String(d.getMonth() + 1).padStart(2, '0'); const dd = String(d.getDate()).padStart(2, '0');
+const dailyData = USER_ITINERARY[dayKey] || { events:[], inspiration:[], shopping:[] };
+dates[dayKey] = {
+date: `${yyyy}-${mm}-${dd}`, display: dd, weekday: weekDays[d.getDay()],
+events: dailyData.events || [],
+inspiration: dailyData.inspiration || [],
+shopping: dailyData.shopping || []
+};
 }
-applyTheme(); 
+return dates;
+}
+
+// 3. 🚀 初始化變數
+applyTheme();
 const scheduleData = generateScheduleData();
 let currentDay = "day1";
 let modalMap = null;
 let currentEventData = null;
-let exchangeRate = 0.0005; // IDR to HKD approx
+let exchangeRate = 0.053;
 let weatherCache = null;
-let shopState = {}; 
-// ✨ Global Event Store to fix quote issues in onClick
-let globalEventStore = {};
+let shopState = {};
 
-function init() { 
-    document.getElementById('app-title').innerHTML = DESTINATION.appTitle;
-    document.getElementById('lbl-curr-target').innerText = DESTINATION.currencyLabel;
-    document.getElementById('lbl-curr-base').innerText = DESTINATION.baseCurrency;
+// 4. 啟動程式
+function init() {
+document.title = CONFIG.ui.browserTitle || "Travel App";
+document.getElementById('app-title').innerHTML = CONFIG.ui.headerTitle || "TRIP PLANNER";
+document.getElementById('lbl-curr-target').innerText = DESTINATION.currencyLabel;
+document.getElementById('lbl-curr-base').innerText = DESTINATION.baseCurrency;
 
-    renderDateSelector(); 
-    
-    // Auto select today if within range
-    const today = new Date().toISOString().split('T')[0];
-    let found = false;
-    Object.keys(scheduleData).forEach(k => { if(scheduleData[k].date === today) { selectDay(k); found = true; }});
-    if(!found) selectDay('day1');
+renderDateSelector();
+selectDay('day1');
+switchMainPage('itinerary', document.querySelector('.nav-item.active'));
+fetchRates();
 
-    switchMainPage('itinerary', document.querySelector('.nav-item.active')); 
-    if(localStorage.getItem('shopState')) shopState = JSON.parse(localStorage.getItem('shopState'));
-    initSwipeClose();
-    setInterval(updateLocalClock, 1000); updateLocalClock();
-    
-    // Default fetch rate
-    fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${DESTINATION.currency}.json`)
-        .then(res => res.json())
-        .then(data => { exchangeRate = data[DESTINATION.currency][DESTINATION.baseCurrency.toLowerCase()]; convertCurrency(); })
-        .catch(e => console.log('Rate offline'));
+if(localStorage.getItem('travelMemo')) document.getElementById('quick-memo').value = localStorage.getItem('travelMemo');
+if(localStorage.getItem('shopState')) shopState = JSON.parse(localStorage.getItem('shopState'));
+
+document.getElementById('quick-memo').addEventListener('input', function() { localStorage.setItem('travelMemo', this.value); });
+
+renderInfoPage();
+renderPhrasePage();
+initSwipeClose();
+setInterval(updateHomeClock, 1000);
+updateHomeClock();
 }
 
-function updateLocalClock() {
-    if(!DESTINATION.timezone) return;
-    const options = { timeZone: DESTINATION.timezone, hour: '2-digit', minute: '2-digit', hour12: false };
-    const timeString = new Date().toLocaleTimeString('en-HK', options);
-    document.getElementById('local-clock').innerText = `${DESTINATION.name} ${timeString}`;
-}
-function convertCurrency() { const val = parseFloat(document.getElementById('curr-jpy').value); if(!isNaN(val)) { document.getElementById('curr-hkd').value = (val * exchangeRate).toFixed(1); } else { document.getElementById('curr-hkd').value = ""; } }
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('open'); }
-function openTranslate() { window.open("https://translate.google.com/?sl=auto&tl=zh-TW", "_blank"); }
-function switchMainPage(pageId, navEl) { 
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
-    document.getElementById('page-' + pageId).classList.add('active'); 
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
-    if(navEl) navEl.classList.add('active'); 
-    const ds = document.querySelector('.date-selector-container'); 
-    ds.style.display = 'block'; 
-    if(pageId === 'weather') fetchWeather();
+function updateHomeClock() {
+if(!CONFIG.ui.homeTimezone) return;
+const options = { timeZone: CONFIG.ui.homeTimezone, hour: '2-digit', minute: '2-digit', hour12: false };
+const timeString = new Date().toLocaleTimeString('en-US', options);
+document.getElementById('home-clock').innerText = `${CONFIG.ui.homeTimeLabel} ${timeString}`;
 }
 
-async function fetchWeather() {
-    const lat = DESTINATION.lat; const lon = DESTINATION.lon; 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,uv_index_max&current=relative_humidity_2m&timezone=Asia%2FMakassar&forecast_days=1`;
-    try {
-        const res = await fetch(url); const data = await res.json();
-        const d = data.daily;
-        const wmo = { 0:'晴朗', 1:'多雲', 2:'多雲', 3:'陰天', 51:'毛毛雨', 61:'陣雨', 80:'雷陣雨', 95:'雷雨' };
-        const w = wmo[d.weathercode[0]] || '多雲';
-        document.getElementById('weather-content').innerHTML = `<div class="weather-main-card"><div class="weather-big-temp">${Math.round(d.temperature_2m_max[0])}°</div><div style="font-weight:500;">${w} • L:${Math.round(d.temperature_2m_min[0])}°</div></div>`;
-        document.getElementById('ws-humidity').innerText = data.current.relative_humidity_2m + '%';
-        document.getElementById('ws-uv').innerText = d.uv_index_max[0];
-        document.getElementById('weather-advice-text').innerText = d.uv_index_max[0] > 7 ? "紫外線強，請注意防曬。" : "天氣舒適。";
-        document.getElementById('weather-details-container').style.display = 'block';
-    } catch(e) { document.getElementById('weather-content').innerHTML = "<div style='text-align:center; padding:30px;'>暫時無法取得天氣</div>"; }
+// 5. 渲染各個頁面元件
+function renderInfoPage() {
+const container = document.getElementById('dynamic-info-content');
+if(!container) return;
+let html = '';
+
+// Visa
+if(TRIP_INFO.visa && TRIP_INFO.visa.number) {
+html += `<div class="info-card"><div class="info-header">簽證資料 (Visa)</div>`;
+html += `<div class="info-row"><div><span class="info-label">類型</span><div>${TRIP_INFO.visa.type}</div></div></div>`;
+html += `<div class="info-row" style="align-items:center; justify-content:space-between;"><div><span class="info-label">號碼</span><div style="font-weight:600;">${TRIP_INFO.visa.number}</div></div><button class="btn-copy-text" onclick="copyToClipboard('${TRIP_INFO.visa.number}')">複製</button></div>`;
+html += `<div class="info-row" style="margin-top:15px;"><div><span class="info-label">有效期</span><div>${TRIP_INFO.visa.expiry || '-'}</div></div></div>`;
+if(TRIP_INFO.visa.note) html += `<div class="info-row" style="color:var(--text-sub); font-size:0.85rem;"><i class="fa-solid fa-circle-info" style="margin-right:5px;"></i> ${TRIP_INFO.visa.note}</div>`;
+html += `</div>`;
 }
 
-function openMapQuery(address) { const query = encodeURIComponent(address + " Ubud"); window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank'); }
-function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => { showToast("已複製"); }); }
+// Flights
+if(TRIP_INFO.flights && TRIP_INFO.flights.length > 0) {
+html += `<div class="info-card"><div class="info-header">航班資料</div><div class="flight-grid">`;
+TRIP_INFO.flights.forEach(f => {
+const icon = f.type === "去程" ? "fa-plane-departure" : "fa-plane-arrival";
+let bookingHtml = f.bookingRef ? `<div class="flight-meta" style="color:var(--text-main); font-weight:600; margin-top:6px;">${f.bookingRef} <i class="fa-regular fa-copy" style="cursor:pointer; margin-left:5px;" onclick="copyToClipboard('${f.bookingRef}')"></i></div>` : '';
+html += `<div class="flight-row"><div class="flight-leg"><div class="flight-meta"><i class="fa-solid ${icon}"></i> ${f.type} (${f.date})</div><div class="flight-code">${f.flight}</div>${bookingHtml}<div class="flight-meta">${f.note}</div></div><div style="text-align:right;"><div class="flight-time">${f.dep}</div><div class="flight-arrow">↓</div><div class="flight-time">${f.arr}</div></div></div>`;
+});
+html += `</div></div>`;
+}
+
+// Hotels
+if(TRIP_INFO.hotels && TRIP_INFO.hotels.length > 0) {
+html += `<div class="info-card"><div class="info-header">住宿</div>`;
+TRIP_INFO.hotels.forEach(h => {
+html += `<div class="info-row"><div class="info-icon"><i class="fa-solid fa-hotel"></i></div><div><span class="info-label">酒店</span><div>${h.name}</div></div></div>`;
+html += `<div class="info-row"><div class="info-icon"><i class="fa-solid fa-location-dot"></i></div><div><span class="info-label">地址</span><div>${h.address}</div><button class="nav-link" style="margin-top:5px; padding:5px 10px; border:1px solid var(--border); background:var(--bg-card); border-radius:4px;" onclick="copyToClipboard('${h.address}')">複製地址</button></div></div>`;
+if(h.phone) {
+html += `<div class="info-row"><div class="info-icon"><i class="fa-solid fa-phone"></i></div><div><span class="info-label">電話</span><div class="contact-container"><span style="margin-right:10px;">${h.phone}</span><a href="javascript:void(0)" onclick="callNumber('${h.phone}')" class="btn-icon-sm btn-call"><i class="fa-solid fa-phone"></i></a></div></div></div>`;
+}
+html += `<div style="height:1px; background:var(--border); margin:15px 0;"></div>`;
+});
+html += `</div>`;
+}
+
+// Emergency
+if(TRIP_INFO.emergency && TRIP_INFO.emergency.length > 0) {
+html += `<div class="info-card"><div class="info-header">緊急聯絡</div>`;
+TRIP_INFO.emergency.forEach(e => {
+const icon = e.name.includes("警") ? "fa-shield-halved" : "fa-truck-medical";
+html += `<div class="info-row"><div class="info-icon"><i class="fa-solid ${icon}"></i></div><div style="width:100%; display:flex; justify-content:space-between; align-items:center;"><div><span class="info-label">${e.name}</span><span>${e.phone}</span></div><a href="javascript:void(0)" onclick="callNumber('${e.phone}')" class="btn-icon-sm btn-call"><i class="fa-solid fa-phone"></i></a></div></div>`;
+});
+html += `</div>`;
+}
+container.innerHTML = html;
+}
+
 function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
 
-// ✨ [Fixed OpenModal Logic using Global Store]
-function openModalById(eventId) {
-    const data = globalEventStore[eventId];
-    if(!data) return;
-    openModal(data);
+async function fetchRates(force = false) {
+const statusEl = document.getElementById('rate-status'); statusEl.innerText = '更新中...';
+try {
+const res = await fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${DESTINATION.currency}.json`);
+const data = await res.json();
+const rate = data[DESTINATION.currency][DESTINATION.baseCurrency.toLowerCase()];
+if(rate) { exchangeRate = rate; statusEl.innerHTML = `1 ${DESTINATION.baseCurrency} = ${(1/exchangeRate).toFixed(2)} ${DESTINATION.currencyLabel}`; convertCurrency(); if(force) showToast("匯率已更新"); }
+} catch(e) { statusEl.innerText = '離線模式'; }
+}
+function convertCurrency() { const jpy = parseFloat(document.getElementById('curr-jpy').value); if(!isNaN(jpy)) { document.getElementById('curr-hkd').value = (jpy * exchangeRate).toFixed(1); } else { document.getElementById('curr-hkd').value = ""; } }
+
+async function fetchWeather() {
+const lat = DESTINATION.lat; const lon = DESTINATION.lon; const targetDateStr = scheduleData[currentDay].date;
+const today = new Date(); const targetDate = new Date(targetDateStr);
+const diffTime = targetDate - today; const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+let url = ""; let isArchive = false;
+const tz = encodeURIComponent(DESTINATION.timezone);
+if (diffDays >= -1 && diffDays <= 15) { url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max&hourly=temperature_2m,weathercode,precipitation_probability,relative_humidity_2m&timezone=${tz}&forecast_days=16`; }
+else { isArchive = true; const pastYear = targetDate.getFullYear() - 1; const pastDateStr = targetDateStr.replace(/^\d{4}/, pastYear); url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${pastDateStr}&end_date=${pastDateStr}&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset&hourly=temperature_2m,weathercode,relative_humidity_2m&timezone=${tz}`; }
+try {
+const res = await fetch(url); const data = await res.json();
+if(isArchive) { if(!data.daily.precipitation_probability_max) data.daily.precipitation_probability_max = [20]; if(!data.daily.uv_index_max) data.daily.uv_index_max = [3]; if(!data.hourly.precipitation_probability) data.hourly.precipitation_probability = new Array(24).fill(0); }
+weatherCache = data; weatherCache.isArchive = isArchive;
+localStorage.setItem('weatherLastFetch', new Date().getTime());
+if(document.getElementById('page-weather').classList.contains('active')) renderWeatherModule();
+} catch(e) { console.error(e); document.getElementById('weather-content').innerHTML = "<div style='text-align:center; padding:30px;'>暫時無法取得天氣</div>"; }
 }
 
-function openModal(data) { 
-    currentEventData = data; 
-    document.getElementById('modal-title').innerText = data.title; 
-    document.getElementById('modal-type').innerText = data.type || "行程"; 
-    document.getElementById('modal-time').innerText = data.time || "彈性時間"; 
-    document.getElementById('modal-price').innerText = data.price || "未定"; 
-    document.getElementById('modal-address-short').innerText = data.address || DESTINATION.name; 
-    document.getElementById('modal-note').innerHTML = data.note || "無備註"; 
-    
-    const actionsContainer = document.getElementById('modal-actions'); actionsContainer.innerHTML = ''; 
-    const addr = data.address || DESTINATION.name;
-    
-    actionsContainer.innerHTML += `<button class="btn-action btn-outline" onclick="copyToClipboard('${addr}')"><i class="fa-regular fa-copy"></i> 複製地址</button>`; 
-    actionsContainer.innerHTML += `<button class="btn-action btn-black" onclick="openMapQuery('${addr}')"><i class="fa-solid fa-location-arrow"></i> Google Maps</button>`; 
-    actionsContainer.innerHTML += `<button class="btn-action btn-outline" onclick="showPhrase('${addr}', 'Pak, tolong ke sini (請載我去這裡)')">🚕 給司機看</button>`; 
-    
-    document.getElementById('detail-modal').classList.add('open'); 
-    
-    // Reset Map
-    setTimeout(() => { 
-        if(modalMap) { modalMap.remove(); modalMap = null; }
-        const coords = data.coords || [DESTINATION.lat, DESTINATION.lon];
-        modalMap = L.map('modal-mini-map', {zoomControl:false, dragging:false, attributionControl: false}).setView(coords, 15); 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(modalMap); 
-        if(data.coords) L.marker(coords).addTo(modalMap); 
-    }, 150); 
+function renderWeatherModule() {
+const container = document.getElementById('weather-content'); const details = document.getElementById('weather-details-container'); const sourceTag = document.getElementById('data-source-tag');
+if(!weatherCache || !weatherCache.daily) { container.innerHTML = "<div style='text-align:center; padding:30px;'>無天氣資料</div>"; return; }
+let apiIndex = 0;
+if(!weatherCache.isArchive) { const targetDate = scheduleData[currentDay].date; apiIndex = weatherCache.daily.time.indexOf(targetDate); if (apiIndex === -1) { container.innerHTML = `<div style='text-align:center; padding:40px;'>尚無預報</div>`; return; } }
+const d = weatherCache.daily; const code = d.weathercode[apiIndex];
+const wmo = { 0:{i:'fa-sun',t:'晴朗'}, 1:{i:'fa-cloud-sun',t:'多雲'}, 2:{i:'fa-cloud-sun',t:'多雲'}, 3:{i:'fa-cloud',t:'陰天'}, 45:{i:'fa-smog',t:'霧'}, 51:{i:'fa-cloud-rain',t:'毛毛雨'}, 61:{i:'fa-cloud-showers-heavy',t:'陣雨'}, 80:{i:'fa-cloud-showers-water',t:'雷陣雨'}, 95:{i:'fa-bolt',t:'雷雨'} };
+const w = wmo[code] || {i:'fa-cloud',t:'多雲'};
+const maxTemp = Math.round(d.temperature_2m_max[apiIndex]); const minTemp = Math.round(d.temperature_2m_min[apiIndex]); const rainProb = d.precipitation_probability_max ? d.precipitation_probability_max[apiIndex] : 0; const tagText = weatherCache.isArchive ? "歷史平均 (去年)" : "即時預報";
+container.innerHTML = `<div class="weather-main-card"><div class="weather-tag-badge">${tagText}</div><div class="weather-header-row"><div><div class="weather-condition"><i class="fa-solid fa-location-arrow" style="font-size:0.8rem;"></i> ${DESTINATION.name}</div><div class="weather-hl">H:${maxTemp}° L:${minTemp}°</div></div><div class="weather-main-icon" style="color:inherit"><i class="fa-solid ${w.i}"></i></div></div><div class="weather-big-temp">${maxTemp}°</div><div style="font-weight:500;">${w.t} • 降雨 ${rainProb}%</div></div>`;
+const hContainer = document.getElementById('weather-hourly'); hContainer.innerHTML = '';
+const startHour = weatherCache.isArchive ? 0 : apiIndex * 24;
+[9, 12, 15, 18, 21].forEach(hour => {
+const idx = startHour + hour;
+if(weatherCache.hourly.time[idx] || (weatherCache.isArchive && idx < 24)) {
+const hTemp = Math.round(weatherCache.hourly.temperature_2m[idx]); const hRain = weatherCache.hourly.precipitation_probability ? weatherCache.hourly.precipitation_probability[idx] : 0; const hCode = weatherCache.hourly.weathercode[idx]; const hw = wmo[hCode] || {i:'fa-cloud'};
+hContainer.innerHTML += `<div class="hourly-item"><div class="hourly-time">${hour}:00</div><div class="hourly-icon"><i class="fa-solid ${hw.i}"></i></div><div class="hourly-temp">${hTemp}°</div><div class="hourly-rain">${hRain > 20 ? hRain + '%' : ''}</div></div>`;
+}
+});
+let advice = "";
+if (rainProb > 40) advice += "攜帶雨具：降雨機率高，請隨身攜帶折傘。<br>"; if (maxTemp < 5) advice += "極寒保暖：建議穿著羽絨服、圍巾、手套，並使用暖暖包。<br>"; else if (maxTemp < 12) advice += "洋蔥穿搭：早晚溫差大，建議大衣搭配發熱衣。<br>"; else advice += "舒適涼爽：穿著輕便外套即可。<br>"; if (d.uv_index_max && d.uv_index_max[apiIndex] > 5) advice += "注意防曬：紫外線較強。";
+document.getElementById('weather-advice-text').innerHTML = advice || "天氣舒適，適合旅遊的一天！";
+const noonIdx = startHour + 12; document.getElementById('ws-humidity').innerText = weatherCache.hourly.relative_humidity_2m[noonIdx] + '%'; document.getElementById('ws-uv').innerText = d.uv_index_max ? d.uv_index_max[apiIndex] : "-"; document.getElementById('ws-sunrise').innerText = d.sunrise[apiIndex].split('T')[1]; document.getElementById('ws-sunset').innerText = d.sunset[apiIndex].split('T')[1];
+sourceTag.innerText = weatherCache.isArchive ? "(歷史回溯模式)" : "(即時預報)"; details.style.display = 'block';
 }
 
-function closeModal() { document.getElementById('detail-modal').classList.remove('open'); }
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('open'); }
+function openTranslate() { window.open("https://translate.google.com/?sl=auto&tl=zh-TW", "_blank"); }
+
+function switchMainPage(pageId, navEl) {
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+document.getElementById('page-' + pageId).classList.add('active');
+document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+if(navEl) navEl.classList.add('active');
+const ds = document.querySelector('.date-selector-container');
+if(pageId === 'info' || pageId === 'phrases') ds.style.display = 'none'; else ds.style.display = 'block';
+if(pageId === 'weather') {
+const now = new Date().getTime(); const lastFetch = localStorage.getItem('weatherLastFetch');
+if (!weatherCache || !lastFetch || (now - lastFetch > 3600000)) fetchWeather(); else renderWeatherModule();
+}
+}
+
+function openPhrasePage() { toggleSidebar(); switchMainPage('phrases'); }
+function renderPhrasePage() {
+const container = document.getElementById('phrases-container'); container.innerHTML = '';
+PHRASE_DATA.forEach(category => {
+container.innerHTML += `<div class="phrase-section-header">${category.category}</div>`;
+let gridHtml = '<div class="phrase-grid">';
+category.items.forEach(item => {
+gridHtml += `<div class="phrase-card" onclick="showPhrase('${item.term_primary}', '${item.term_secondary}')">
+<div class="phrase-primary">${item.term_primary}</div>
+<div class="phrase-secondary">${item.term_secondary}</div>
+<div class="phrase-pronounce">${item.term_pronounce || ''}</div>
+</div>`;
+});
+gridHtml += '</div>';
+container.innerHTML += gridHtml;
+});
+}
+
+function sendWhatsApp() {
+let phone = document.getElementById('wa-phone').value.replace(/\D/g, '');
+if(!phone) { alert("請輸入電話"); return; }
+if (navigator.geolocation) {
+const btn = document.getElementById('wa-btn'); const orgText = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 定位中...';
+navigator.geolocation.getCurrentPosition((pos) => {
+const mapLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+const text = `我平安抵達了！位置：${mapLink}`;
+window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+btn.innerHTML = orgText;
+}, (err) => { alert("無法定位: " + err.message); btn.innerHTML = orgText; }, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+} else { alert("瀏覽器不支援定位"); }
+}
+
+// 🗺️ 地圖連結優化 (Universal Links)
+function openMapQuery(address) {
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const query = encodeURIComponent(address);
+const url = isMobile 
+    ? `https://www.google.com/maps/search/?api=1&query=${query}`
+    : `https://www.google.com/maps/search?q=${query}`;
+window.open(url, '_blank');
+}
+
+function callNumber(num) { window.location.href = `tel:${num}`; }
+function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => { showToast("已複製"); }); }
+function searchGmail(query) { window.open(`https://mail.google.com/mail/u/0/#search/${encodeURIComponent(query)}`, '_blank'); }
+
+function openModal(data) {
+currentEventData = data;
+document.getElementById('modal-title').innerText = data.title;
+document.getElementById('modal-type').innerText = data.type || "Note";
+document.getElementById('modal-time').innerText = data.time || "--:--";
+document.getElementById('modal-price').innerText = data.price || "-";
+document.getElementById('modal-open-hours').innerText = data.open_hours || "待確認";
+document.getElementById('modal-address-short').innerText = data.address || "";
+document.getElementById('modal-note').innerText = data.note || "";
+
+// 聯絡電話處理
+const infoGrid = document.querySelector('.modal-info-grid');
+const existingPhone = document.getElementById('dynamic-phone-row');
+if(existingPhone) existingPhone.remove();
+
+if(data.phone) {
+const phoneRow = document.createElement('div'); phoneRow.id = 'dynamic-phone-row';
+phoneRow.innerHTML = `<span class="modal-label">電話</span><div class="contact-container"><span class="modal-value" style="margin-right:10px;">${data.phone}</span><a href="javascript:void(0)" onclick="callNumber('${data.phone}')" class="btn-icon-sm" style="border:1px solid var(--border);"><i class="fa-solid fa-phone"></i></a></div>`; infoGrid.appendChild(phoneRow);
+}
+
+// 按鈕區處理
+const actionsContainer = document.getElementById('modal-actions');
+actionsContainer.innerHTML = '';
+const addr = data.address_local || data.address;
+
+// 只有當有地址時，才顯示複製與導航
+if(addr) {
+actionsContainer.innerHTML += `<button class="btn-action btn-outline" onclick="copyToClipboard('${addr}')"><i class="fa-regular fa-copy"></i> 複製地址</button>`;
+actionsContainer.innerHTML += `<button class="btn-action btn-black" onclick="openMapQuery('${data.address}')"><i class="fa-solid fa-location-arrow"></i> Google Maps 導航</button>`;
+if (data.type === '住宿' || data.type === '交通') { actionsContainer.innerHTML += `<button class="btn-action btn-outline" onclick="showPhrase('${addr}', '請載我去這裡')">🚕 顯示的士卡</button>`; }
+}
+
+// 搜尋預約信 (總是顯示)
+if (data.type === '美食' || data.type === '晚餐' || data.type === '午餐' || data.type === '早餐' || data.type === '住宿') {
+actionsContainer.innerHTML += `<button class="btn-action btn-outline" onclick="searchGmail('${data.title}')">🔍 搜尋預約信 (Gmail)</button>`;
+}
+
+document.getElementById('detail-modal').classList.add('open');
+
+// 地圖處理
+const miniMapContainer = document.getElementById('modal-mini-map');
+if(!data.coords && !data.address) {
+miniMapContainer.style.display = 'none';
+} else {
+miniMapContainer.style.display = 'block';
+setTimeout(() => {
+if(modalMap) modalMap.remove();
+const targetCoords = data.coords || [DESTINATION.lat, DESTINATION.lon];
+modalMap = L.map('modal-mini-map', {zoomControl:false, dragging:false, attributionControl: false}).setView(targetCoords, 15);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(modalMap);
+if(data.coords) {
+L.marker(data.coords, {icon: L.divIcon({className:'custom-div-icon',html:"<div style='background:black;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 2px 5px rgba(0,0,0,0.3);'></div>",iconSize:[12,12]})}).addTo(modalMap);
+}
+modalMap.invalidateSize();
+}, 150);
+}
+}
+
+function closeModal() { document.getElementById('detail-modal').classList.remove('open'); document.querySelector('.modal-content').style.transform = ''; }
 document.getElementById('detail-modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
-// ✨ [Swipe to Close Logic]
 function initSwipeClose() {
-    const modalContent = document.querySelector('.modal-content'); const dragArea = document.getElementById('modal-drag-area');
-    let startY = 0; let currentY = 0;
-    
-    dragArea.addEventListener('touchstart', (e) => { 
-        startY = e.touches[0].clientY; 
-        modalContent.style.transition = 'none'; 
-    });
-    
-    dragArea.addEventListener('touchmove', (e) => { 
-        currentY = e.touches[0].clientY; 
-        const delta = currentY - startY; 
-        if(delta > 0) { // Only allow dragging down
-            modalContent.style.transform = `translateY(${delta}px)`; 
-        }
-    });
-    
-    dragArea.addEventListener('touchend', () => { 
-        const delta = currentY - startY; 
-        modalContent.style.transition = 'transform 0.3s ease-out'; 
-        if(delta > 100) { // Threshold to close
-            closeModal(); 
-            setTimeout(() => { modalContent.style.transform = ''; }, 300);
-        } else { 
-            modalContent.style.transform = ''; 
-        }
-    });
+const modalContent = document.querySelector('.modal-content'); const dragArea = document.getElementById('modal-drag-area');
+let startY = 0; let currentY = 0;
+dragArea.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; modalContent.style.transition = 'none'; });
+dragArea.addEventListener('touchmove', (e) => { currentY = e.touches[0].clientY; const delta = currentY - startY; if(delta > 0) modalContent.style.transform = `translateY(${delta}px)`; });
+dragArea.addEventListener('touchend', () => { const delta = currentY - startY; modalContent.style.transition = 'transform 0.3s ease-out'; if(delta > 100) closeModal(); else modalContent.style.transform = ''; });
 }
-
 function renderDateSelector() { const container = document.getElementById('date-selector'); container.innerHTML = ''; Object.keys(scheduleData).forEach(dayKey => { const day = scheduleData[dayKey]; const chip = document.createElement('div'); chip.className = `date-chip`; chip.id = `chip-${dayKey}`; chip.onclick = () => selectDay(dayKey, chip); chip.innerHTML = `<span class="day-num">${day.display}</span><span class="day-week">${day.weekday}</span>`; container.appendChild(chip); }); }
-function selectDay(dayKey, chipEl) { currentDay = dayKey; document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active')); (chipEl || document.getElementById(`chip-${dayKey}`)).classList.add('active'); if(chipEl) chipEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); renderTimeline(dayKey); renderInspiration(dayKey); renderShopping(dayKey); }
 
-function renderTimeline(dayKey) { 
-    const container = document.getElementById('timeline-container'); container.innerHTML = ''; 
-    (scheduleData[dayKey].events || []).forEach((event, index) => { 
-        const item = document.createElement('div'); item.className = 'timeline-item'; 
-        let tags = event.tags.map(t => `<span class="card-tag ${t==='必去'||t==='安全'?'highlight':''} ${t==='必辦'?'alert':''}">${t}</span>`).join(''); 
-        const colorStyle = event.moodColor ? `border-left: 4px solid ${event.moodColor};` : ''; 
-        
-        // ✨ Safe Event Storing
-        const eventId = `evt-${dayKey}-${index}`;
-        globalEventStore[eventId] = event;
+function selectDay(dayKey, chipEl) { currentDay = dayKey; document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active')); (chipEl || document.getElementById(`chip-${dayKey}`)).classList.add('active'); if(chipEl) chipEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); renderTimeline(dayKey); renderInspiration(dayKey); renderShopping(dayKey); if(document.getElementById('page-weather').classList.contains('active')) fetchWeather(); }
 
-        item.innerHTML = `<div class="card" style="${colorStyle}" onclick="openModalById('${eventId}')"><div class="card-nav-btn" onclick="event.stopPropagation(); openMapQuery('${event.address}')"><i class="fa-solid fa-location-arrow"></i></div><span class="card-time">${event.time}</span><h3 class="card-title">${event.title}</h3><div class="tags">${tags}</div></div>`; 
-        container.appendChild(item); 
-    }); 
-    if(!scheduleData[dayKey].events.length) container.innerHTML = "<div style='text-align:center; padding:50px; color:var(--text-sub);'>本日無行程，自由探索！</div>"; 
+function renderTimeline(dayKey) {
+const container = document.getElementById('timeline-container'); container.innerHTML = '';
+(scheduleData[dayKey].events || []).forEach(event => {
+const item = document.createElement('div'); item.className = 'timeline-item';
+let tags = event.tags.map(t => `<span class="card-tag">${t}</span>`).join('');
+const safeData = JSON.stringify(event).replace(/'/g, "'");
+const navBtn = `<div class="card-nav-btn" onclick="event.stopPropagation(); openMapQuery('${event.address}')"><i class="fa-solid fa-location-arrow"></i></div>`;
+const colorStyle = event.moodColor ? `border-left-color: ${event.moodColor};` : 'border-left-color: var(--accent);';
+item.innerHTML = `<div class="card" style="${colorStyle}" onclick='openModal(${safeData})'>${navBtn}<span class="card-time">${event.time}</span><h3 class="card-title">${event.title}</h3><div class="tags">${tags}</div></div>`;
+container.appendChild(item);
+});
+if(!scheduleData[dayKey].events.length) container.innerHTML = "<div style='text-align:center; padding:50px; color:var(--text-sub);'>本日無行程，自由探索！</div>";
 }
 
-function renderInspiration(dayKey) { 
-    const container = document.getElementById('inspiration-container'); container.innerHTML = ''; 
-    (scheduleData[dayKey].inspiration || []).forEach((item, index) => { 
-        // ✨ Safe Event Storing for Inspiration too
-        const eventId = `insp-${dayKey}-${index}`;
-        globalEventStore[eventId] = item;
-
-        container.innerHTML += `<div class="inspire-card" data-tag="${item.tag}" onclick="openModalById('${eventId}')"><div class="inspire-nav-btn"><i class="fa-solid fa-chevron-right"></i></div><div class="inspire-badge">${item.tag}</div><h3 class="inspire-title">${item.title}</h3><p class="inspire-note">${item.note}</p></div>`; 
-    }); 
-    if(!scheduleData[dayKey].inspiration.length) container.innerHTML = "<div style='text-align:center; padding:30px; color:var(--text-sub);'>本日無靈感筆記</div>"; 
+function renderInspiration(dayKey) {
+const container = document.getElementById('inspiration-container'); container.innerHTML = '';
+(scheduleData[dayKey].inspiration || []).forEach(item => {
+const safeData = JSON.stringify(item).replace(/'/g, "'");
+const clickAttr = `onclick='openModal(${safeData})'`;
+container.innerHTML += `<div class="inspire-card" data-tag="${item.tag}" ${clickAttr}><div class="inspire-badge">${item.tag}</div><h3 class="inspire-title">${item.title}</h3><p class="inspire-note">${item.note}</p></div>`;
+});
+if(!scheduleData[dayKey].inspiration.length) container.innerHTML = "<div style='text-align:center; padding:30px; color:var(--text-sub);'>本日無靈感筆記</div>";
 }
 
 function filterInspiration(tag, btn) { document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.inspire-card').forEach(card => { if(tag === 'all' || card.getAttribute('data-tag') === tag) card.classList.remove('hidden'); else card.classList.add('hidden'); }); }
