@@ -168,30 +168,30 @@ nav.bottom-nav { position: fixed; bottom: 0; width: 100%; background-color: var(
 <body>
 
 <script id="USER_DATA_CONFIG">
-// 1. 🎨 主題顏色 (Ubud Slow Living Theme)
+// 1. 🎨 主題顏色 (HKMA Metal & Water Energy)
 const THEME_CONFIG = {
-    accentColor: "#d44601",      // 溫暖橙 (重點按鈕/交通)
-    accentText: "#FFFFFF",       // 橙色背景上的白字
-    backgroundColor: "#f2e8d5",  // 米色/奶油砂 (背景)
-    cardColor: "#fdfaf3",        // 象牙白 (卡片/內容區)
-    textColor: "#5c0d09",        // 深紅/深棕 (主要文字)
-    textSubColor: "#177263",     // 熱帶綠 (次要資訊/標籤)
-    borderColor: "#e0d6c3",      // 邊框顏色
-    googleFontsUrl: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@700;800&display=swap",
-    fontHeading: '"Playfair Display", serif',
-    fontBody: '"Montserrat", sans-serif'
+    accentColor: "#0F4C75",      // 深海藍 (水：智慧、冷靜、降溫)
+    accentText: "#FFFFFF",       
+    backgroundColor: "#F5F5F0",  // 鉑金灰/米白 (金：質感、秩序)
+    cardColor: "#FFFFFF",        // 純白 (乾淨)
+    textColor: "#2C3E50",        // 鐵灰 (權威、穩重)
+    textSubColor: "#7F8C8D",     // 銀灰 (細節)
+    borderColor: "#D1D5DB",      // 金屬邊框感
+    googleFontsUrl: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Lato:wght@300;400;700&display=swap",
+    fontHeading: '"Cormorant Garamond", serif', // 經典襯線體，象徵傳統與權力
+    fontBody: '"Lato", sans-serif'              // 現代無襯線體，象徵高效與邏輯
 };
 
 // 2. 🗓️ 旅程設定
 const CONFIG = {
     ui: {
-        browserTitle: "Ubud 2026",
-        headerTitle: "烏布慢活重生之旅",
+        browserTitle: "烏布滌新之旅",
+        headerTitle: "烏布滌新之旅", 
         homeTimezone: "Asia/Hong_Kong",
         homeTimeLabel: "HKT"
     },
-    startDate: "2026-09-25", // 週五出發
-    duration: 6
+    startDate: "2026-09-22", // 週二開始，提早消磁
+    duration: 9              // 擴展至 9 天
 };
 
 // 3. 📍 目的地
@@ -209,311 +209,440 @@ const DESTINATION = {
 const TRIP_INFO = {
     visa: {
         type: "印尼落地簽 (VoA)",
-        number: "需準備 Rp 500,000",
-        note: "建議事先申請 e-VOA 省排隊時間"
+        number: "Rp 500,000",
+        note: "已申請 e-VOA，走自動通關"
     },
     flights: [
         {
-            type: "去程", flight: "CX785", date: "09/25",
+            type: "去程", flight: "CX785", date: "09/22",
             dep: "HKG 10:00", arr: "DPS 15:00",
-            note: "T1 登機 / 峇里島入境卡已填", bookingRef: "CX-GO"
+            note: "商務艙 T1 登機 ｜ 專車司機將在入境大廳舉牌", bookingRef: "CX-HKMA-GO"
         },
         {
             type: "回程", flight: "CX784", date: "09/30",
             dep: "DPS 16:10", arr: "HKG 21:00",
-            note: "需提早 2.5 小時抵達機場", bookingRef: "CX-BACK"
+            note: "專車送機 ｜ 需預留 2.5 小時", bookingRef: "CX-HKMA-BACK"
         }
     ],
     hotels: [
         {
             name: "Tegal Sari Accommodation",
             address: "Jl. Hanoman, Padang Tegal, Ubud, Bali",
-            phone: "+62361973318"
+            phone: "+62361973318",
+            note: "Room: Super Deluxe (Upper Floor) ｜ 結界基地"
         }
     ],
     emergency: [
+        { name: "專屬司機 (WhatsApp)", phone: "預約後填入" },
         { name: "遊客警察", phone: "+62-361-759-687" },
-        { name: "救護車", phone: "119" },
-        { name: "警察局", phone: "110" }
+        { name: "高端醫療 (BIMC)", phone: "+62-361-3000-911" }
     ]
 };
 
-// 5. 🗺️ 行程細節 (包含詳細後備方案)
+// 5. 🗺️ 行程細節 (9天高密度完整版)
 const USER_ITINERARY = {
-    "day1": { // 9/25 Fri
+    // ================= Phase 1: 冷卻消磁 (Water) =================
+    "day1": { // 9/22 Tue - 入水
         "events": [
             {
-                "time": "15:00", "title": "抵達峇里島機場", "type": "交通",
-                "address": "Ngurah Rai International Airport", "tags": ["入境", "移動"], "moodColor": "#d44601",
-                "note": "辦理入境。尋找舉著「Tegal Sari」牌子的司機。若有延誤用 WhatsApp 聯繫飯店。"
+                "time": "15:00", "title": "抵達：專車接機", "type": "交通",
+                "address": "Ngurah Rai International Airport", "tags": ["專車", "Toyota Innova"], "moodColor": "#2C3E50",
+                "note": "司機舉牌接機。上車後請司機將冷氣開強，播放無人聲純音樂。直奔烏布 (約 1.5 - 2 hr)。"
             },
             {
                 "time": "17:30", "title": "Check-in: Tegal Sari", "type": "住宿",
-                "address": "Jl. Hanoman, Padang Tegal, Ubud", 
-                "coords": [-8.5173, 115.2659], "tags": ["稻田景觀"], "moodColor": "#177263",
-                "note": "確認房間是否為 'Upper Floor' 面稻田。檢查門鎖與保險箱。"
+                "address": "Jl. Hanoman, Padang Tegal", 
+                "tags": ["結界"], "moodColor": "#0F4C75",
+                "note": "進入房間，關閉工作通知。只喝氣泡水，聽窗外流水聲。"
             },
             {
-                "time": "18:00", "title": "Coco Supermarket 採買", "type": "購物",
-                "address": "Jl. Raya Pengosekan", "tags": ["補給"], "moodColor": "#5c0d09",
-                "note": "買紅酒、起司、水果、大瓶水、防蚊噴霧(必備)。"
-            },
-            {
-                "time": "19:00", "title": "晚餐: Pison Ubud", "type": "美食",
-                "address": "Jl. Hanoman No. 10X", "tags": ["Chill", "獨旅安全"], "moodColor": "#d44601",
-                "note": "擁有稻田景觀的咖啡廳，氣氛佳且明亮安全，適合單身女性。"
-            },
-            {
-                "time": "20:30", "title": "陽台休息", "type": "休息",
-                "address": "Tegal Sari", "tags": ["放鬆"], "moodColor": "#177263",
-                "note": "泡杯茶，聽蟲鳴，享受第一晚。"
+                "time": "18:30", "title": "晚餐: Rouge - Sushi Bar", "type": "美食",
+                "address": "Jl. Bisma No. 7C", "tags": ["生冷", "滋陰"], "moodColor": "#0F4C75",
+                "note": "營業時間：12:00-23:00。紅黑配色爵士吧。必點：生蠔、生魚片、冰鎮 Dry Sake。物理降溫。"
             }
         ],
         "inspiration": [
             { 
-                "title": "方案A: 房內按摩 (In-room)", 
-                "tag": "TIRED", 
-                "type": "放鬆",
-                "address": "Tegal Sari Accommodation",
-                "open_hours": "10:00 - 22:00",
-                "price": "Rp 150,000+",
-                "note": "如果搭機太累不想出門，直接請飯店安排房內按摩。推薦 Balinese Massage (60mins)。" 
+                "title": "備案A: Pison Ubud (輕鬆吃)", 
+                "tag": "FOOD", "type": "美食", 
+                "address": "Jl. Hanoman No. 10X", "open_hours": "07:00-23:00",
+                "note": "若太累不想跑遠，飯店旁走路即達。推薦：Tuna Tartare + 椰子水。" 
             },
             { 
-                "title": "方案B: KAFE", 
-                "tag": "SOLO", 
-                "type": "美食",
-                "address": "Jl. Hanoman No.44B, Ubud",
-                "open_hours": "07:30 - 23:00",
-                "price": "Rp 100,000",
-                "note": "非常安全的社交中心，充滿數位遊牧者。有機食物很棒，適合一個人看書、寫日記。" 
+                "title": "備案B: Yoga Barn (陰瑜伽)", 
+                "tag": "TIRED", "type": "活動", 
+                "address": "Jl. Hanoman, Pengosekan", "open_hours": "07:00-21:00",
+                "note": "若想伸展筋骨，步行去參加 19:30 的 Yin Yoga 或 Gong Bath (需官網查課表)。" 
             }
         ],
-        "shopping": ["大瓶礦泉水", "防蚊噴霧", "紅酒/起司", "熱帶水果"]
+        "shopping": ["氣泡水", "高品質紅酒"]
     },
-    "day2": { // 9/26 Sat
+    "day2": { // 9/23 Wed - 漂浮與藝術 (包車日)
         "events": [
             {
-                "time": "09:30", "title": "包車出發 (往北)", "type": "交通",
-                "address": "Tegal Sari Lobby", "tags": ["包車"], "moodColor": "#d44601",
-                "note": "攜帶泳衣(若要下水)、毛巾、飲用水。今日為感官療癒日。"
+                "time": "10:00", "title": "Solace Float", "type": "療癒",
+                "address": "Jl. Monkey Forest", "tags": ["失重", "歸零"], "moodColor": "#0F4C75",
+                "note": "營業時間：09:00-20:00。預約 90分鐘鎂鹽漂浮。模擬母體羊水，強制大腦關機，修復神經系統。"
             },
             {
-                "time": "10:30", "title": "Pura Mengening 秘密神社", "type": "體驗",
-                "address": "Jl. Tirta No. 25M, Tampaksiring", "coords": [-8.4235, 115.3120],
-                "tags": ["淨化", "能量"], "moodColor": "#177263",
-                "note": "避開聖泉寺人潮，進行 Melukat 水淨化儀式。門票 Rp 30k + 沙龍 10k。"
+                "time": "12:30", "title": "午餐: Fivelements Sakti", "type": "美食",
+                "address": "Mambal, Abiansemal", "tags": ["河谷", "能量"], "moodColor": "#177263",
+                "note": "【隱世景點】懸在阿勇河上的竹建築。聽著磅礴水聲吃生機飲食 (Plant-based)。"
             },
             {
-                "time": "13:00", "title": "Svasensa 調香工作坊", "type": "活動",
-                "address": "Toya Ubud EcoPark, Jl. Raya Kenderan", "tags": ["調香", "必去"], "moodColor": "#d44601",
-                "note": "在叢林峽谷邊調製專屬香水，環境極美。費用約 Rp 459,000。"
+                "time": "15:00", "title": "Tjampuhan Spa (The Grotto)", "type": "SPA",
+                "address": "Jl. Raya Campuhan", "tags": ["石窟", "水療"], "moodColor": "#0F4C75",
+                "note": "營業時間：10:00-18:00。兩河交匯處的半開放石窟。冷熱水交替浸泡，利用岩石導出火氣。"
             },
             {
-                "time": "16:00", "title": "Pyramids of Chi", "type": "療癒",
-                "address": "Jalan Kelebang Moding No. 22", "tags": ["聲療", "玄學"], "moodColor": "#177263",
-                "note": "預約 Ancient Sound Healing (US$ 25)。躺著透過銅鑼聲波釋放壓力。"
+                "time": "17:00", "title": "The Blanco Renaissance Museum", "type": "藝術",
+                "address": "Jl. Raya Campuhan", "tags": ["金氣", "權威"], "moodColor": "#B8860B",
+                "note": "營業時間：09:00-17:00。就在 Spa 對面。建築極盡奢華，金屬框架與圓拱門，吸收「貴氣」。"
             },
             {
-                "time": "18:30", "title": "晚餐: The Yoga Barn", "type": "美食",
-                "address": "Jl. Hanoman, Ubud", "tags": ["健康有機"], "moodColor": "#d44601",
-                "note": "Garden Kafe。吃清淡的有機料理，延續療癒感。"
+                "time": "19:00", "title": "晚餐: Room 4 Dessert", "type": "美食",
+                "address": "Jl. Raya Sanggingan", "tags": ["金屬", "結構"], "moodColor": "#B8860B",
+                "note": "營業時間：16:00-22:00。甜點殿堂。品嚐具備「結構感」與「精緻度」的甜點套餐，搭配調酒。"
             }
         ],
         "inspiration": [
             { 
-                "title": "方案A: Ganesha Bookshop", 
-                "tag": "RAINY", 
-                "type": "閱讀",
-                "address": "Jl. Raya Ubud, Ubud",
-                "open_hours": "09:00 - 18:00",
-                "note": "如果下雨，這裡是躲避的好地方。專賣印尼文化書籍，也有二手書，氣氛安靜。" 
+                "title": "備案A: Neka Art Museum", 
+                "tag": "ART", "type": "藝術", 
+                "address": "Jalan Raya Sanggingan", "open_hours": "09:00-17:00",
+                "note": "若不喜歡 Blanco 的華麗，改來這裡看「馬來克力士劍 (Keris)」收藏，感受銳利的金屬能量。" 
             },
             { 
-                "title": "方案B: Lazy Cats Cafe", 
-                "tag": "TIRED", 
-                "type": "休息",
-                "address": "Jl. Raya Ubud No.11",
-                "open_hours": "08:00 - 21:00",
-                "note": "不想走動時，這裡有很舒服的復古沙發。由素食藝術家經營，適合放空。" 
+                "title": "備案B: Mozaic Gastronomy", 
+                "tag": "FOOD", "type": "美食", 
+                "address": "Jl. Raya Sanggingan", "open_hours": "18:00-22:00",
+                "note": "若不想吃甜點當正餐，改去旁邊的 Mozaic 吃正統法餐。" 
             }
         ],
-        "shopping": ["自製香水"]
+        "shopping": ["無"]
     },
-    "day3": { // 9/27 Sun
+    "day3": { // 9/24 Thu - 聲波與足療 (定點)
         "events": [
             {
-                "time": "09:30", "title": "ARMA 藝術博物館", "type": "藝術",
-                "address": "Jl. Raya Pengosekan", "tags": ["文化", "散步"], "moodColor": "#177263",
-                "note": "像皇家花園般的園區，欣賞傳統繪畫。"
+                "time": "09:00", "title": "專車前往: Pyramids of Chi", "type": "交通",
+                "address": "Bentuyung", "tags": ["專車"], "moodColor": "#2C3E50",
+                "note": "前往北邊郊區。"
             },
             {
-                "time": "11:30", "title": "Andong 古董街", "type": "逛街",
-                "address": "Jalan Raya Andong", "tags": ["淘寶"], "moodColor": "#d44601",
-                "note": "建議搭車到上游，慢慢往下坡走逛下來比較省力。"
+                "time": "10:00", "title": "Water Healing (聲療)", "type": "療癒",
+                "address": "Pyramids of Chi", "tags": ["聲波", "共振"], "moodColor": "#0F4C75",
+                "note": "需預約。建在水池上的金字塔。銅鑼聲波(金)震碎體內淤積壓力。"
             },
             {
-                "time": "14:00", "title": "午餐: 髒鴨飯 Bebek Bengil", "type": "美食",
-                "address": "Bebek Bengil, Jl. Hanoman", "tags": ["經典", "稻田"], "moodColor": "#d44601",
-                "note": "就在飯店旁。務必選稻田邊涼亭座位。"
+                "time": "13:00", "title": "午餐: Hujan Locale", "type": "美食",
+                "address": "Jl. Sri Wedari", "tags": ["雨", "精緻"], "moodColor": "#0F4C75",
+                "note": "營業時間：12:00-15:00 / 17:30-22:00。名字意為「雨」。殖民風格裝潢，食物精緻清爽。"
             },
             {
-                "time": "15:30", "title": "吠陀占星: Ashish", "type": "玄學",
-                "address": "Jl. Subak Sok Wayah", "tags": ["占星", "必去"], "moodColor": "#177263",
-                "note": "車開不進去。在 Ubud Main Road 入口下車，步行15分經稻田步道(很美)。"
+                "time": "14:30", "title": "Ubud Art Market 尋寶", "type": "逛街",
+                "address": "Jl. Raya Ubud", "tags": ["青銅", "樂器"], "moodColor": "#B8860B",
+                "note": "營業時間：08:00-17:00。去新改建的市集尋找青銅樂器 (Gamelan 銅片) 或金屬工藝品。"
             },
             {
-                "time": "18:30", "title": "晚餐: Kebun Bistro", "type": "小酌",
-                "address": "Jl. Hanoman No.44", "tags": ["法式", "微醺"], "moodColor": "#d44601",
-                "note": "法式鄉村風，紅白酒豐富，適合優雅獨酌。"
+                "time": "16:00", "title": "Jaens Spa (足部反射)", "type": "SPA",
+                "address": "Jl. Raya Pengosekan", "tags": ["補水", "引火"], "moodColor": "#177263",
+                "note": "營業時間：09:00-21:00。60分鐘 Foot Reflexology。刺激湧泉穴，引火下行。"
+            },
+            {
+                "time": "18:30", "title": "晚餐: Copper Kitchen", "type": "美食",
+                "address": "Jl. Bisma (Bisma Eight)", "tags": ["金/土"], "moodColor": "#B8860B",
+                "note": "Bisma Eight 屋頂。開闊視野，金屬色調裝潢，安靜優雅。"
             }
         ],
         "inspiration": [
             { 
-                "title": "方案A: BMC Money Changer", 
-                "tag": "必辦", 
-                "type": "服務",
-                "address": "Jl. Raya Pengosekan Ubud No.108",
-                "open_hours": "08:00 - 21:00",
-                "note": "如果還沒換錢，這家匯率公道且安全。" 
+                "title": "備案A: Paradiso Ubud (看電影)", 
+                "tag": "RELAX", "type": "娛樂", 
+                "address": "Jl. Goutama Selatan", "open_hours": "10:00-22:00",
+                "note": "若不想逛街，來這間有機素食電影院，躺在軟墊上看場電影或紀錄片。" 
+            },
+            { 
+                "title": "備案B: Nusantara", 
+                "tag": "FOOD", "type": "美食", 
+                "address": "Jl. Dewi Sita", "open_hours": "18:00-21:30",
+                "note": "若想體驗更深沉的香料結構，改去 Nusantara。" 
             }
         ],
-        "shopping": ["木雕小物", "銀器", "復古裝飾"]
+        "shopping": ["青銅工藝品"]
     },
-    "day4": { // 9/28 Mon
+
+    // ================= Phase 2: 能量轉換 (Moon) =================
+    "day4": { // 9/25 Fri - 滿月重生 (包車日)
         "events": [
             {
-                "time": "08:00", "title": "Ubud Morning Market", "type": "市集",
-                "address": "Jl. Raya Ubud", "tags": ["早起", "在地"], "moodColor": "#d44601",
-                "note": "感受生活氣息，買新鮮芒果、山竹。"
+                "time": "08:00", "title": "專車: 往東北山區", "type": "交通",
+                "address": "Sebatu", "tags": ["專車"], "moodColor": "#2C3E50",
+                "note": "今日路程較遠，車上備好更換衣物與毛巾。"
             },
             {
-                "time": "09:30", "title": "香氛巡禮 (Blue Stone/Bohe)", "type": "購物",
-                "address": "Jl. Dewi Sita", "tags": ["精油", "香水"], "moodColor": "#177263",
-                "note": "Blue Stone (雨林精油), Bohe (香水), Oiland (護膚油)。"
+                "time": "09:00", "title": "Pura Mengening 聖泉洗禮", "type": "體驗",
+                "address": "Tampaksiring", "tags": ["深層", "寒水"], "moodColor": "#0F4C75",
+                "note": "開放時間：08:00-17:00。【隱世景點】清冷泉水 Melukat 儀式。強效洗去燥氣與舊運勢。"
             },
             {
-                "time": "11:30", "title": "午餐: Taco Casa", "type": "美食",
-                "address": "Jl. Pengosekan", "tags": ["墨西哥"], "moodColor": "#d44601",
-                "note": "簡單快速好吃，吃完回飯店避暑。"
+                "time": "12:30", "title": "午餐: Akasha Restaurant", "type": "美食",
+                "address": "Jl. Sinta, Keliki", "tags": ["幾何", "水晶"], "moodColor": "#B8860B",
+                "note": "【能量景點】充滿神聖幾何結構的竹建築。環境高頻，適合補充高我能量。"
             },
             {
-                "time": "14:00", "title": "Putri Bali Spa 2", "type": "按摩",
-                "address": "Jl. Hanoman", "tags": ["SPA", "放鬆"], "moodColor": "#177263",
-                "note": "飯店附近的優質平價選擇。預算約 Rp 150,000。"
+                "time": "14:00", "title": "Tegallalang 批發街尋寶", "type": "購物",
+                "address": "Jalan Raya Tegallalang", "tags": ["玻璃", "金屬"], "moodColor": "#B8860B",
+                "note": "這條街是工藝品批發總部。請司機開慢點，看到賣大型玻璃吹製或金屬雕塑的店就停下來看。"
             },
             {
-                "time": "18:30", "title": "晚餐: Hujan Locale", "type": "美食",
-                "address": "Jl. Sri Wedari No. 5", "tags": ["Fine Dining", "印尼菜"], "moodColor": "#d44601",
-                "note": "推薦一樓吧台或二樓靠窗。必點 Bebek Goreng 或 Rendang。"
+                "time": "15:30", "title": "Karsa Spa (稻田按摩)", "type": "SPA",
+                "address": "Campuhan Ridge Top", "tags": ["稻田", "深層"], "moodColor": "#177263",
+                "note": "營業時間：09:00-19:00。需提前預約。Deep Tissue Massage。在稻田中修復身體。"
+            },
+            {
+                "time": "19:00", "title": "滿月宴: Ambar at Mandapa", "type": "美食",
+                "address": "Ritz-Carlton Reserve, Kedewatan", "tags": ["權威", "頂級"], "moodColor": "#B8860B",
+                "note": "【能量頂點】懸崖酒吧俯瞰阿勇河。點 Gold-infused 調酒，對月舉杯，確立「監管者」身份。"
             }
         ],
         "inspiration": [
             { 
-                "title": "方案A: Threads of Life", 
-                "tag": "PHOTO", 
-                "type": "逛街",
-                "address": "Jl. Kajeng No.24",
-                "open_hours": "10:00 - 19:00",
-                "note": "一家像博物館的紡織品店。支持偏鄉婦女的手工藝，非常精緻，拍照很美，但單價較高。" 
+                "title": "備案A: Gunung Kawi Sebatu", 
+                "tag": "TEMP", "type": "景點", 
+                "address": "Sebatu, Tegallalang", "open_hours": "08:00-17:00",
+                "note": "若 Mengening 人多，改來這個更安靜、有鯉魚池的水神廟。" 
             },
             { 
-                "title": "方案B: Room 4 Dessert", 
-                "tag": "FOOD", 
-                "type": "甜點",
-                "address": "Jl. Raya Sanggingan",
-                "open_hours": "16:00 - 22:00",
-                "price": "Rp 400,000+",
-                "note": "如果有空位，去試試這家上過 Netflix 的知名甜點 Fine Dining。適合慶祝或犒賞自己。" 
+                "title": "備案B: Botanica Day Spa", 
+                "tag": "SPA", "type": "SPA", 
+                "address": "Jl. Raya Sanggingan", "open_hours": "09:00-20:00",
+                "note": "若 Karsa 客滿，改來這裡做 Chakra Balancing Massage。" 
             }
         ],
-        "shopping": ["Blue Stone 精油", "Bohe 香水", "新鮮水果"]
+        "shopping": ["玻璃藝術品", "金屬雕塑"]
     },
-    "day5": { // 9/29 Tue
+
+    // ================= Phase 3: 金水顯化 (Metal) =================
+    "day5": { // 9/26 Sat - 木金交鋒 (包車日)
         "events": [
             {
-                "time": "09:00", "title": "Jero Gede 傳統治療", "type": "玄學",
-                "address": "Keliki / Sebatu Area", "tags": ["療癒", "重點"], "moodColor": "#177263",
-                "note": "GetYourGuide 預訂行程。包含司機與翻譯。Jero 擅長讀取能量。"
+                "time": "09:30", "title": "木雕村: Tony Raka Gallery", "type": "藝術",
+                "address": "Jl. Raya Mas No. 86", "tags": ["金剋木", "權威"], "moodColor": "#8B7D6B",
+                "note": "營業時間：10:00-17:00。南下 Mas Village。欣賞大師級木雕，感受「雕琢成器」的能量。"
             },
             {
-                "time": "14:00", "title": "Bintang Supermarket", "type": "購物",
-                "address": "Jl. Raya Sanggingan No. 45", "tags": ["最後採買"], "moodColor": "#177263",
-                "note": "買 Sensatia 保養品、Bokashi 草藥油 (伴手禮)。"
+                "time": "12:00", "title": "午餐: Embers", "type": "美食",
+                "address": "Jl. Raya Mas (Bisma Eight)", "tags": ["地中海", "農場"], "moodColor": "#A0522D",
+                "note": "位於木雕村附近的高級農場餐廳，節省交通時間。"
             },
             {
-                "time": "17:30", "title": "Sayan House 夕陽晚餐", "type": "美食",
-                "address": "Jl. Raya Sayan No.70", "tags": ["絕景", "日落"], "moodColor": "#d44601",
-                "note": "懸崖邊看日落，日式拉美 Fusion 菜。需預約。預算 Rp 400,000。"
+                "time": "13:30", "title": "初階調香: Svasensa", "type": "活動",
+                "address": "Toya EcoPark, Kenderan", "tags": ["提煉", "金"], "moodColor": "#B8860B",
+                "note": "從繁雜原料中提煉精華。Beginner Class (90mins)。"
             },
             {
-                "time": "20:00", "title": "整理行李", "type": "整理",
-                "address": "Tegal Sari", "tags": ["打包"], "moodColor": "#5c0d09",
-                "note": "把戰利品打包，檢查證件。"
+                "time": "16:00", "title": "Bambu Indah (下午茶)", "type": "體驗",
+                "address": "Jl. Baung, Sayan", "tags": ["銅", "竹"], "moodColor": "#B8860B",
+                "note": "【建築靈感】參觀全銅電梯與天然泉水池。感受金屬與自然的完美結合。"
+            },
+            {
+                "time": "19:00", "title": "晚餐: Kebun Bistro", "type": "美食",
+                "address": "Jl. Hanoman", "tags": ["工業風", "紅酒"], "moodColor": "#2C3E50",
+                "note": "法式小酒館。工業風裝潢帶有金屬秩序感，氣氛輕鬆優雅。"
             }
         ],
         "inspiration": [
             { 
-                "title": "方案A: Campuhan Ridge Walk", 
-                "tag": "PHOTO", 
-                "type": "風景",
-                "address": "Campuhan Ridge Walk",
-                "open_hours": "全天",
-                "price": "Free",
-                "note": "如果下午行程提早結束，可去走這條著名的山脊步道。視野開闊，適合黃昏散步拍照。" 
+                "title": "備案A: Setia Darma Masks", 
+                "tag": "CULTURE", "type": "博物館", 
+                "address": "Jl. Tegal Bingin, Mas", "open_hours": "08:00-16:00",
+                "note": "面具與人偶之家。若不喜歡現代畫廊，這裡的傳統氛圍更濃厚。" 
+            },
+            { 
+                "title": "備案B: Umah Pizza (外送)", 
+                "tag": "RAINY", "type": "美食", 
+                "address": "Jl. Jembawan", "note": "若太累，回飯店叫 Gojek 外送松露披薩配紅酒。" 
             }
         ],
-        "shopping": ["Sensatia 保養品", "Bokashi 油"]
+        "shopping": ["初階香水"]
     },
-    "day6": { // 9/30 Wed
+    "day6": { // 9/27 Sun - 鑑賞眼界 (市區)
         "events": [
             {
-                "time": "09:00", "title": "最後早餐 & Check-out", "type": "住宿",
-                "address": "Tegal Sari", "tags": ["退房"], "moodColor": "#177263",
-                "note": "享受最後寧靜，檢查抽屜遺漏物品。"
+                "time": "10:00", "title": "古董尋寶: Andong", "type": "逛街",
+                "address": "Jalan Raya Andong", "tags": ["青銅", "石雕"], "moodColor": "#8B7D6B",
+                "note": "搭車至上游往下逛。目標：青銅(Bronze)或石雕擺件，作為未來辦公室鎮物。"
             },
             {
-                "time": "11:00", "title": "前往機場 (DPS)", "type": "交通",
-                "address": "Ngurah Rai International Airport", "tags": ["回程"], "moodColor": "#d44601",
-                "note": "車程預估 2 小時。搭乘 CX784 (16:10 起飛)。"
+                "time": "13:00", "title": "午餐: Pison Ubud", "type": "美食",
+                "address": "Jl. Hanoman", "tags": ["稻田"], "moodColor": "#177263",
+                "note": "環境安全明亮，食物品質穩定。"
+            },
+            {
+                "time": "15:00", "title": "吠陀占星: Ashish", "type": "玄學",
+                "address": "Jl. Subak Sok Wayah", "tags": ["理性", "規劃"], "moodColor": "#2C3E50",
+                "note": "理性的星盤分析。需步行 15 分鐘入稻田 (若太熱可請司機送到最近入口)。"
+            },
+            {
+                "time": "17:00", "title": "Blue Stone Botanicals", "type": "購物",
+                "address": "Jl. Dewi Sita", "tags": ["精油", "雨林"], "moodColor": "#177263",
+                "note": "營業時間：09:00-21:00。試聞雨林系列精油，挑選幫助睡眠的氣味。"
+            },
+            {
+                "time": "19:00", "title": "晚餐: Watercress", "type": "美食",
+                "address": "Jl. Monkey Forest", "tags": ["清脆", "水"], "moodColor": "#177263",
+                "note": "食材新鮮脆口，現代風格。"
+            }
+        ],
+        "inspiration": [
+            { 
+                "title": "備案A: Threads of Life", 
+                "tag": "ART", "type": "購物", 
+                "address": "Jl. Kajeng No.24", "open_hours": "10:00-19:00",
+                "note": "若 Andong 太熱，改來這裡看博物館級的傳統紡織品。" 
+            },
+            { 
+                "title": "備案B: Milk & Madu", 
+                "tag": "FOOD", "type": "美食", 
+                "address": "Jl. Suweta No.3", "open_hours": "07:00-22:00",
+                "note": "若想吃早午餐風格的輕食，這裡是最佳選擇。" 
+            }
+        ],
+        "shopping": ["古董鎮紙", "青銅擺件", "助眠精油"]
+    },
+    "day7": { // 9/28 Mon - 大師架構 (包車日)
+        "events": [
+            {
+                "time": "10:00", "title": "大師調香: Svasensa Atelier", "type": "活動",
+                "address": "Toya EcoPark", "tags": ["結構", "權威"], "moodColor": "#B8860B",
+                "note": "3小時進階課。深入化學分子結構，調製專屬的「權威之香」。"
+            },
+            {
+                "time": "14:00", "title": "午餐: Sun Sun Warung", "type": "美食",
+                "address": "Jl. Jembawan", "tags": ["家庭", "溫馨"], "moodColor": "#A0522D",
+                "note": "精緻的家庭式印尼菜，平衡上午的腦力消耗。"
+            },
+            {
+                "time": "15:30", "title": "按摩一: Putri Bali Spa 2", "type": "SPA",
+                "address": "Jl. Hanoman", "tags": ["便利", "放鬆"], "moodColor": "#177263",
+                "note": "營業時間：09:00-21:00。回到市區，快速消除疲勞。"
+            },
+            {
+                "time": "17:00", "title": "The Shampoo Lounge", "type": "美容",
+                "address": "Jl. Monkey Forest", "tags": ["護髮", "儀容"], "moodColor": "#0F4C75",
+                "note": "營業時間：09:00-19:00。預約 Cream Bath。頭部水療護理，為晚上的大餐整理儀容。"
+            },
+            {
+                "time": "19:00", "title": "晚餐: Apéritif Restaurant", "type": "美食",
+                "address": "Viceroy Bali", "tags": ["秩序", "完美"], "moodColor": "#2C3E50",
+                "note": "1920年代殖民風格 Fine Dining。極致的秩序與服務。預演高層社交場景。"
+            }
+        ],
+        "inspiration": [
+            { 
+                "title": "備案A: Usada Bali", 
+                "tag": "CULTURE", "type": "活動", 
+                "address": "Jl. Sugriwa", "open_hours": "07:00-21:00",
+                "note": "文化中心。若髮廊客滿，可來這裡參加靜心活動或喝杯薑茶。" 
+            },
+            { 
+                "title": "備案B: Liap Liap", 
+                "tag": "DINNER", "type": "美食", 
+                "address": "Jl. Monkey Forest", "open_hours": "11:00-22:00",
+                "note": "若想輕鬆一點，改去吃這家裝潢時尚的印尼燒烤。" 
+            }
+        ],
+        "shopping": ["大師級香水"]
+    },
+    "day8": { // 9/29 Tue - 鞏固夕陽 (包車日)
+        "events": [
+            {
+                "time": "09:00", "title": "能量讀取: Jero Gede", "type": "玄學",
+                "address": "Keliki", "tags": ["清理", "確認"], "moodColor": "#2C3E50",
+                "note": "最後確認能量場是否乾淨，獲取大運箴言。"
+            },
+            {
+                "time": "12:00", "title": "午餐: Moksa", "type": "美食",
+                "address": "Sayan, Ubud", "tags": ["永續", "純淨"], "moodColor": "#177263",
+                "note": "擁有自己永續農場的餐廳。在去超市前先淨化腸胃。"
+            },
+            {
+                "time": "13:30", "title": "採買: Bintang Supermarket", "type": "購物",
+                "address": "Jl. Raya Sanggingan", "tags": ["補給"], "moodColor": "#177263",
+                "note": "位於 Sayan 區。購買 Sensatia (精油) 與 Bokashi (藥油)。"
+            },
+            {
+                "time": "15:00", "title": "按摩二: Ubud Traditional Spa", "type": "SPA",
+                "address": "Payogan", "tags": ["極致", "深層"], "moodColor": "#8B7D6B",
+                "note": "營業時間：10:00-22:00。Rice Farmer Massage。深層組織梳理，建立身體秩序。"
+            },
+            {
+                "time": "17:30", "title": "夕陽宴: Sayan House", "type": "美食",
+                "address": "Jl. Raya Sayan", "tags": ["絕景", "交融"], "moodColor": "#B8860B",
+                "note": "懸崖日落。日式與拉美融合菜 (水火既濟)。完美的旅程句點。"
+            }
+        ],
+        "inspiration": [
+            { 
+                "title": "備案A: Campuhan Ridge Walk", 
+                "tag": "VIEW", "type": "景點", 
+                "address": "Jl. Raya Campuhan", "open_hours": "全天",
+                "note": "若超市採買很快結束，可請司機載到 Karsa Cafe (步道頂端) 喝杯茶看風景，不用爬山。" 
+            },
+            { 
+                "title": "備案B: Four Seasons Jala", 
+                "tag": "DINNER", "type": "美食", 
+                "address": "Sayan, Ubud", "open_hours": "18:00-22:00",
+                "note": "若 Sayan House 客滿，旁邊四季飯店的 Jala 也是頂級選擇。" 
+            }
+        ],
+        "shopping": ["Sensatia", "Bokashi"]
+    },
+    "day9": { // 9/30 Wed - 歸位
+        "events": [
+            {
+                "time": "09:00", "title": "早餐 & Check-out", "type": "住宿",
+                "address": "Tegal Sari", "tags": ["離去"], "moodColor": "#2C3E50",
+                "note": "將所有戰利品裝箱。保持優雅。"
+            },
+            {
+                "time": "11:00", "title": "專車送機", "type": "交通",
+                "address": "Ngurah Rai Airport", "tags": ["回程"], "moodColor": "#2C3E50",
+                "note": "前往機場，搭乘 CX784。"
             },
             {
                 "time": "13:30", "title": "機場免稅店", "type": "購物",
-                "address": "DPS Duty Free", "tags": ["消耗現鈔"], "moodColor": "#d44601",
-                "note": "把剩下的印尼盾花完。"
+                "address": "DPS Duty Free", "tags": ["金"], "moodColor": "#B8860B",
+                "note": "購入一支高品質鋼筆或墨鏡，象徵新視野。"
             }
         ],
         "inspiration": [
             { 
-                "title": "方案A: Seniman Coffee", 
-                "tag": "TIRED", 
-                "type": "咖啡",
-                "address": "Jl. Sri Wedari No.5",
-                "open_hours": "07:30 - 22:00",
-                "price": "Rp 50,000",
-                "note": "如果時間還早，去喝杯烏布最強咖啡再走。著名的搖搖椅座位。" 
+                "title": "備案A: Premier Lounge", 
+                "tag": "WAIT", "type": "休息", 
+                "address": "DPS International Departure", "open_hours": "24H",
+                "note": "提早入關去貴賓室休息，保持體力。" 
             }
         ],
-        "shopping": ["免稅品"]
+        "shopping": ["鋼筆", "墨鏡"]
     }
 };
 
-// 6. 🗣️ 常用短語 (Indonesian)
+// 6. 🗣️ 常用短語 (Private Driver Edition)
 const PHRASE_DATA = [
     {
-        category: "司機溝通",
+        category: "專屬司機 (Driver)",
         items: [
-            { term_primary: "Pak, tolong ke sini", term_secondary: "先生，請載我去這裡", term_pronounce: "Pak, to-long ke si-ni" },
-            { term_primary: "Terima Kasih", term_secondary: "謝謝", term_pronounce: "Te-ri-ma Ka-sih" },
-            { term_primary: "Tunggu sebentar", term_secondary: "請等一下", term_pronounce: "Tung-gu se-ben-tar" }
+            { term_primary: "Pak, tolong tunggu di sini", term_secondary: "先生，請在這裡等我", term_pronounce: "Tung-gu di si-ni" },
+            { term_primary: "AC tolong lebih dingin", term_secondary: "冷氣請強一點 (重要)", term_pronounce: "AC le-bih di-ngin" },
+            { term_primary: "Saya mau istirahat", term_secondary: "我想休息(不聊天)", term_pronounce: "Saya mau is-ti-ra-hat" }
         ]
     },
     {
         category: "餐廳/購物",
         items: [
             { term_primary: "Berapa harganya?", term_secondary: "多少錢？", term_pronounce: "Be-ra-pa har-ga-nya" },
-            { term_primary: "Tidak mau pedas", term_secondary: "不要辣", term_pronounce: "Ti-dak mau pe-das" },
-            { term_primary: "Bill, please", term_secondary: "請結帳 (Minta Bon)", term_pronounce: "Min-ta Bon" }
+            { term_primary: "Minta Bon / Bill", term_secondary: "請結帳", term_pronounce: "Min-ta Bon" }
         ]
     }
 ];
